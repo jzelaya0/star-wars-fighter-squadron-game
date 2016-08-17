@@ -47,12 +47,16 @@ app.use(express.static(__dirname + '/public'));// Use static file assests from F
 // ROUTES
 // ******************************
 
-// TEST ROUTE
-app.get('/', function(req,res){
-  console.log('User has accessed http://localhost', config.port);
-  res.json({success: true, message: "Hello User!"});
-});
+// Get all routes from /app/controllers/index.js
+var apiRoutes = require("./app/controllers");
 
+// prefix all routes with "api"
+app.use('/api', apiRoutes);
+
+// Send users to the front end
+app.get('*', function(req,res){
+  res.sendFile(path.join(__dirname + '/public/index.html'));
+});
 
 // ******************************
 // START SERVER
