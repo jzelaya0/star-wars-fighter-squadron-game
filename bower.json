@@ -1,0 +1,25 @@
+{
+  "name": "star-wars-fighter-squadron-game",
+  "description": "star wars pilot game",
+  "main": "server.js",
+  "authors": [
+    "Jesse Zelaya"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/jzelaya0/star-wars-fighter-squadron-game",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "source/assets/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-route": "^1.5.8",
+    "angular-bootstrap": "^2.0.2",
+    "bootstrap-css-only": "^3.3.6",
+    "angular-animate": "^1.5.8",
+    "angular-hotkeys": "chieffancypants/angular-hotkeys#^1.7.0"
+  }
+}

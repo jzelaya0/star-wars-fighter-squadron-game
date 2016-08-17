@@ -1,0 +1,6 @@
+#Config Files
+.env
+
+#Runtime Data
+node_modules
+public/

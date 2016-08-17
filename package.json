@@ -1,0 +1,53 @@
+{
+  "name": "star-wars-fighter-squadron-game",
+  "version": "1.0.0",
+  "description": "star wars pilot game",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jzelaya0/star-wars-fighter-squadron-game.git"
+  },
+  "author": "Jesse Zelaya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jzelaya0/star-wars-fighter-squadron-game/issues"
+  },
+  "homepage": "https://github.com/jzelaya0/star-wars-fighter-squadron-game#readme",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "jsonwebtoken": "^7.1.9",
+    "mongoose": "^4.5.9",
+    "mongoose-unique-validator": "^1.0.2",
+    "morgan": "^1.7.0",
+    "node-env-file": "^0.1.8",
+    "pug": "^2.0.0-beta5"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.14.0",
+    "gulp": "^3.9.1",
+    "gulp-cache": "^0.4.5",
+    "gulp-concat": "^2.6.0",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-filter": "^4.0.0",
+    "gulp-flatten": "^0.3.1",
+    "gulp-if": "^2.0.1",
+    "gulp-imagemin": "^3.0.3",
+    "gulp-jshint": "^2.0.1",
+    "gulp-main-bower-files": "^1.5.2",
+    "gulp-ng-annotate": "^2.0.0",
+    "gulp-nodemon": "^2.1.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-stylus": "^2.5.0",
+    "gulp-uglify": "^2.0.0",
+    "jshint": "^2.9.2"
+  }
+}
