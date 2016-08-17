@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "postinstall": "gulp default"
   },
   "repository": {
     "type": "git",
@@ -20,16 +21,8 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.2",
-    "express": "^4.14.0",
-    "jsonwebtoken": "^7.1.9",
-    "mongoose": "^4.5.9",
-    "mongoose-unique-validator": "^1.0.2",
-    "morgan": "^1.7.0",
-    "node-env-file": "^0.1.8",
-    "pug": "^2.0.0-beta5"
-  },
-  "devDependencies": {
     "browser-sync": "^2.14.0",
+    "express": "^4.14.0",
     "gulp": "^3.9.1",
     "gulp-cache": "^0.4.5",
     "gulp-concat": "^2.6.0",
@@ -44,10 +37,17 @@
     "gulp-nodemon": "^2.1.0",
     "gulp-notify": "^2.2.0",
     "gulp-plumber": "^1.1.0",
+    "gulp-pug": "^3.0.4",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-stylus": "^2.5.0",
     "gulp-uglify": "^2.0.0",
-    "jshint": "^2.9.2"
+    "jshint": "^2.9.2",
+    "jsonwebtoken": "^7.1.9",
+    "mongoose": "^4.5.9",
+    "mongoose-unique-validator": "^1.0.2",
+    "morgan": "^1.7.0",
+    "node-env-file": "^0.1.8",
+    "pug": "^2.0.0-beta5"
   }
 }
