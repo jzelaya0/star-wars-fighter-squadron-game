@@ -2,7 +2,7 @@
 var env = require('node-env-file');// require node-env-file module
 
 // Grab environment variables
-env(__dirname +  '/.env');
+env(__dirname +  '/.env', {raise: false});
 
 // export config properties
 module.exports = {
