@@ -13,7 +13,11 @@ var UserSchema = new Schema({
   email: {type: String, requried: true, index: {unique: true}},//Prevent duplicate email addresses
   password: {type: String, required: true, select: false},//Prevent returning password on queries
   highestScore: Number
-});
+}, 
+{
+  timestamps: true
+}
+);
 
 
 // PASWORD HASH
