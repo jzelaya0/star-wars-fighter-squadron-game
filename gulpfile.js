@@ -17,7 +17,8 @@ var cache            = require('gulp-cache');
 var nodemon          = require('gulp-nodemon');
 var flatten          = require('gulp-flatten');
 var pug              = require('gulp-pug');
-var bs               = require('browser-sync');
+var bs               = require('browser-sync').create();
+var reload           = bs.reload;
 
 // ==================================================
 // PATHS
@@ -52,7 +53,17 @@ var build = {
 // ==================================================
 // DEFAULT TASK
 // ==================================================
-gulp.task('default', ['assetsBuild','browser-sync','nodemon','watch']);
+gulp.task('default', ['serve']);
+
+// ==================================================
+// SERVE
+// ==================================================
+gulp.task('serve', ['browser-sync'], function(){
+  gulp.watch(src.cssAll, ['cssBuild', 'browserReload']);
+  gulp.watch(src.homePage, ['homepageBuild', 'browserReload']);
+  gulp.watch(src.js, ['jsBuild', 'browserReload']);
+  gulp.watch(src.templates, ['pagesBuild', 'browserReload']);
+});
 
 // ==================================================
 // NODEMON & BROWSER SYNC TASKS
@@ -60,21 +71,36 @@ gulp.task('default', ['assetsBuild','browser-sync','nodemon','watch']);
 
 // Browser Sync
 // ************************
-gulp.task('browser-sync', function(){
+gulp.task('browser-sync', ['nodemon'], function(){
   bs.init(null, {
-    files: 'public/**/*.*',
+    open: "ui",
     proxy: 'http://localhost:3000',
+    browser: "google chrome",
     port: 4000
   });
 });
 
 // Start Nodemon server
 // ************************
-gulp.task('nodemon', function(){
+gulp.task('nodemon', ['assetsBuild'], function(done){
+  var started = false;
+
   return nodemon({
-    script: 'server.js'
+    script: 'server.js',
+    watch: ['app/**/*.*', 'server.js']
   })
+    .on('start', function(){
+      // trigger browser-sync if not running
+      if(!started){
+        done();
+      }
+      started = true;
+    })
     .on('restart', function(){
+      // set delayed restart for browser-sync
+      setTimeout(function(){
+        reload();
+      }, 500);
       console.log('*******************\nRESTARTED NODEMON\n*******************');
     });
 });
@@ -88,10 +114,7 @@ gulp.task('nodemon', function(){
 // ************************
 gulp.task('homepageBuild', function(){
   return gulp.src(src.homePage)
-    .pipe(gulp.dest(build.homePage))
-    .pipe(bs.reload({
-      stream: true
-    }));
+    .pipe(gulp.dest(build.homePage));
 });
 
 // TASK: BUILD PAGES
@@ -99,10 +122,7 @@ gulp.task('homepageBuild', function(){
 gulp.task('pagesBuild', function(){
   return gulp.src(src.templates)
     .pipe(pug())
-    .pipe(gulp.dest(build.pages))
-    .pipe(bs.reload({
-      stream: true
-    }));
+    .pipe(gulp.dest(build.pages));
 });
 
 // TASK: BUILD CSS
@@ -120,10 +140,7 @@ gulp.task('cssBuild', function(){
     .pipe(rename({
       suffix: '.min'
     }))
-    .pipe(gulp.dest(build.css))
-    .pipe(bs.reload({
-      stream: true
-    }));
+    .pipe(gulp.dest(build.css));
 });
 
 // TASK: BUILD JS
@@ -150,10 +167,7 @@ gulp.task('jsBuild', function(){
     .pipe(rename({
       suffix: ".min"
     }))
-    .pipe(gulp.dest(build.js))
-    .pipe(bs.reload({
-      stream: true
-    }));
+    .pipe(gulp.dest(build.js));
 });
 
 
@@ -209,17 +223,25 @@ gulp.task('audioBuild', function(){
     .pipe(gulp.dest(build.audio));
 });
 
+// TASK: RELOAD THE BROWSER
+// ************************
+gulp.task('browserReload', function(done){
+  bs.reload();
+  done();
+});
 
 // TASK: ALL ASSET BUILDS
 // ************************
 gulp.task('assetsBuild', ['imagesBuild', 'audioBuild', 'bowerBuild']);
 
-// ==================================================
-// WATCH FOR CHANGES
-// ==================================================
-gulp.task('watch', function(){
-  gulp.watch(src.cssAll, ['cssBuild']);
-  gulp.watch(src.homePage, ['homepageBuild']);
-  gulp.watch(src.js, ['jsBuild']);
-  gulp.watch(src.templates, ['pagesBuild']);
-});
+// TASK: HEROKU POSTBUILD
+// ************************
+gulp.task('herokuBuild', [
+  'imagesBuild',
+  'audioBuild',
+  'bowerBuild',
+  'homepageBuild',
+  'pagesBuild',
+  'cssBuild',
+  'jsBuild'
+]);
