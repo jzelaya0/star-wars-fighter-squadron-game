@@ -10,7 +10,7 @@
     // ==================================================
     .factory('Auth', function($q, $http, AuthToken){
       // create empty factory object
-      authFactory = {};
+      var authFactory = {};
 
       // Log User in
       // ******************************
