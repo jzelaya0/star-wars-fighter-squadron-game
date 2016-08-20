@@ -8,7 +8,7 @@ var nano             = require('gulp-cssnano');
 var rename           = require('gulp-rename');
 var gulpIf           = require('gulp-if');
 var notify           = require('gulp-notify');
-var plubmer          = require('gulp-plumber');
+var plumber          = require('gulp-plumber');
 var filter           = require('gulp-filter');
 var sourcemaps       = require('gulp-sourcemaps');
 var mainBowerFiles   = require('gulp-main-bower-files');
@@ -19,6 +19,7 @@ var flatten          = require('gulp-flatten');
 var pug              = require('gulp-pug');
 var bs               = require('browser-sync').create();
 var reload           = bs.reload;
+var errorLine        = Array(30).join('*');
 
 // ==================================================
 // PATHS
@@ -101,7 +102,7 @@ gulp.task('nodemon', ['assetsBuild'], function(done){
       setTimeout(function(){
         reload();
       }, 500);
-      console.log('*******************\nRESTARTED NODEMON\n*******************');
+      console.log(errorLine + "\nRESTARTED NODEMON\n" + errorLine);
     });
 });
 
@@ -129,7 +130,7 @@ gulp.task('pagesBuild', function(){
 // ************************
 gulp.task('cssBuild', function(){
   return gulp.src(src.cssMain)
-    .pipe(plubmer({
+    .pipe(plumber({
       errorHandler: notify.onError("Error: <%= error.message %>")
     }))
     .pipe(sourcemaps.init())
@@ -147,18 +148,25 @@ gulp.task('cssBuild', function(){
 // ************************
 gulp.task('jsBuild', function(){
   return gulp.src(src.js)
+    .pipe(plumber(function(){
+      console.log(errorLine + "\nHEY! ERROR BUILDING JS!\n" + errorLine);
+      this.emit('end');
+    }))
     .pipe(jshint())
-    .pipe(notify(function(file){
-      if (file.jshint.success) {
-        // Report nothing if it's all good
-        return false;
-      }
-      var errors = file.jshint.results.map(function(data){
-      if (data.error) {
-        return "(" + data.error.line + data.error.character + ")" + data.error.reason;
-      }}).join("\n");
+    .pipe(notify({
+      sound: "Blow",
+      message: function(file){
+        if (file.jshint.success) {
+            // Report nothing if it's all good
+            return false;
+          }
+        var errors = file.jshint.results.map(function(data){
+        if (data.error) {
+          return "(" + data.error.line + data.error.character + ")" + data.error.reason;
+        }}).join("\n");
 
-      return file.relative + "(" + file.jshint.results.length + " errors)\n" + errors;
+        return file.relative + "(" + file.jshint.results.length + " errors)\n" + errors;
+      }
     }))
     .pipe(sourcemaps.init())
     .pipe(concat('app.js'))
