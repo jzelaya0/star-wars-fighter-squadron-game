@@ -9,7 +9,16 @@
       $routeProvider
         // Route for home page
         .when('/', {
-          templateUrl: 'templates/_home.html'
+          templateUrl: 'pages/_home.html'
+        })
+        // Route for login page
+        .when('/login', {
+          templateUrl: 'pages/_login.html',
+          controller: 'loginController',
+          controllerAs: 'login'
+        })
+        .when('/game', {
+          templateUrl: 'pages/_game.html',
         });
 
         // Remove url hash
