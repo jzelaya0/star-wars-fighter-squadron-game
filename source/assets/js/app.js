@@ -5,6 +5,7 @@
   angular
     .module('swfsGameApp', [
       'appRoutes',
-      'mainCtrl'
+      'mainCtrl',
+      'authService'
     ]);
 }());
