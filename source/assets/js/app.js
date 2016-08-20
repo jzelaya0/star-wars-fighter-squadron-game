@@ -6,6 +6,9 @@
     .module('swfsGameApp', [
       'appRoutes',
       'mainCtrl',
-      'authService'
+      'loginCtrl',
+      'alertService',
+      'authService',
+      'ui.bootstrap'
     ]);
 }());
