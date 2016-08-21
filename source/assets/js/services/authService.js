@@ -50,7 +50,7 @@
       // ******************************
       authFactory.getUserProfileInfo = function(token){
         if (AuthToken.getUserToken()) {
-          return $http.get('/api/profile');
+          return $http.get('/api/users/profile');
         }else {
           return $q.reject({message: "User does not have a token!"});
         }
