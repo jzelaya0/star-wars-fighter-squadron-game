@@ -17,8 +17,38 @@
   </head>
 
   <body ng-app="swfsGameApp" ng-controller="mainController as main">
-    <h1>HELLO FROM THE HOME PAGE</h1>
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-inverse">
+      <!-- NAVBAR HEADER -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" ng-click='navbarCollapsed  = !navbarCollapsed'>
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a href="/" class="navbar-brand">SWFS</a>
+      </div>
+      <!-- NAVBAR COLLAPSE -->
+      <div class="collapse navbar-collapse" uib-collapse="!navbarCollapsed">
+        <!-- main navigation -->
+        <ul class="nav navbar-nav" ng-if='main.isLoggedIn'>
+          <li><a href="/game">Play</a></li>
+          <li><a href="/profile">Profile</a></li>
+          <li><a href="/score-board">Score Board</a></li>
+        </ul>
 
+        <!-- Navbar right -->
+        <ul class="nav navbar-nav navbar-right">
+          <li ng-if="!main.isLoggedIn"><a href="/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+          <li ng-if="!main.isLoggedIn"><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Log In</a></li>
+          <li ng-if="main.isLoggedIn" class="navbar-text">Hey, {{main.user.name}}!</li>
+          <li ng-if="main.isLoggedIn"><a href="/login"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>
+          <li ng-if="main.isLoggedIn" ng-controller="loginController as login"><a ng-href="/login" ng-click="login.logout()"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+        </ul>
+      </div>
+    </nav>
+    <!-- INJECT TEMPLATE VIEWS HERE -->
     <main class="container">
       <div ng-view></div>
     </main>
