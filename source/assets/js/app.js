@@ -10,5 +10,10 @@
       'alertService',
       'authService',
       'ui.bootstrap'
-    ]);
+    ])
+
+    .config(function($httpProvider){
+      // attach AuthInterceptor to requests
+      $httpProvider.interceptors.push('AuthInterceptor');
+    });
 }());
