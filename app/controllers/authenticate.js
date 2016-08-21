@@ -29,6 +29,7 @@ router.post('/', function(req,res){
         }else {
           // if there is a user found and password is valid
           var token = jwt.sign({
+            _id: user._id,
             name: user.name,
             username: user.username,
             email: user.email},
