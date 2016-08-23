@@ -6,7 +6,7 @@
     .module('userService', [])
     .factory('User', function($http){
       // create empty factory object
-      userFactory = {};
+      var userFactory = {};
 
       // Get all users
       // ******************************
