@@ -33,10 +33,6 @@ div(class="row col-sm-6 col-sm-offset-3")
       input(type="password", class="form-control", name="password", placeholder="Password", ng-model="signup.signUpData.password", ng-minlength="6", ng-maxlength="12",required)
       div(class="help-block", ng-messages="signupForm.password.$error", ng-show="signupForm.password.$dirty")
         div(ng-messages-include="pages/components/_form-messages.html")
-      //- success or error alert
-    div.form-group
-      div(uib-alert, ng-repeat='alert in alerts' ng-class="'alert alert-' + (alert.type || 'warning')" close='alert.close()').
-        {{alert.message}}
     //- submit button
     div.form-group
       button(type="submit", class="btn btn-info", ng-disabled="signupForm.$invalid", name="submit").

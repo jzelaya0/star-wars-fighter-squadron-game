@@ -51,6 +51,15 @@
     </nav>
     <!-- INJECT TEMPLATE VIEWS HERE -->
     <main class="container">
+      <!-- Display alert messages -->
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+          <div uib-alert ng-repeat='alert in alerts' ng-class="'alert alert-' + (alert.type || 'warning')" close='alert.close()'>
+            {{alert.message}}
+          </div>
+        </div>
+      </div>
+      <!-- Inject templates -->
       <div ng-view></div>
     </main>
   </body>

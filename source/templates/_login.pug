@@ -15,10 +15,6 @@ div(class="row col-sm-6 col-sm-offset-3")
       lable.
         Password
       input(type='password', class='form-control', placeholder='Password', ng-model='login.loginData.password')
-      //- login error
-    div.form-group
-      div(uib-alert, ng-repeat='alert in alerts' ng-class="'alert alert-' + (alert.type || 'warning')" close='alert.close()').
-        {{alert.message}}
       //- submit button
     div.form-group
       button(type='submit', class='btn btn-success').
