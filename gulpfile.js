@@ -122,6 +122,13 @@ gulp.task('homepageBuild', function(){
 // ************************
 gulp.task('pagesBuild', function(){
   return gulp.src(src.templates)
+    .pipe(plumber({
+      errorHandler: notify.onError({
+        message: "Error: <%= error.message %>",
+        title: "PUG COMPILE ERROR!",
+        sound: "Ping"
+      })
+    }))
     .pipe(pug())
     .pipe(gulp.dest(build.pages));
 });
@@ -131,7 +138,11 @@ gulp.task('pagesBuild', function(){
 gulp.task('cssBuild', function(){
   return gulp.src(src.cssMain)
     .pipe(plumber({
-      errorHandler: notify.onError("Error: <%= error.message %>")
+      errorHandler: notify.onError({
+        title: "STYLUS COMPILE ERROR",
+        message: "Error: <%= error.message %>",
+        sound: "Hero"
+      })
     }))
     .pipe(sourcemaps.init())
     .pipe(stylus({
