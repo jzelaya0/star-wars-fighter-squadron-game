@@ -9,7 +9,10 @@
       'loginCtrl',
       'alertService',
       'authService',
-      'ui.bootstrap'
+      'userService',
+      'signUpCtrl',
+      'ui.bootstrap',
+      'ngMessages'
     ])
 
     .config(function($httpProvider){
