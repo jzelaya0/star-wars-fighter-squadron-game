@@ -4,7 +4,7 @@
 
   angular
     .module('signUpCtrl', [])
-    .controller('signUpController', function(User, Alerts){
+    .controller('signUpController', function($location, User, Alerts){
       var vm = this;
 
       // Create a new user
@@ -18,6 +18,7 @@
             // Successful sign up
             if(result.success === true){
               Alerts.addAlert('success', result.message);
+              $location.path('/login');
             // If both username and email are taken
             }else if (result.email_error && result.username_error) {
               Alerts.addAlert('danger', result.email_error.value + " & " + result.username_error.value + taken);
