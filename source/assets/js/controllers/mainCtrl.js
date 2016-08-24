@@ -4,14 +4,14 @@
 
   angular
     .module('mainCtrl',[])
-    .controller('mainController', function($rootScope, $location, Auth){
+    .controller('mainController', function($rootScope, Auth){
       var vm = this;
 
       // Check if user is logged in on each request
       // ******************************
       vm.isLoggedIn = Auth.isUserLoggedIn();
 
-      $rootScope.$on('$routeChangeStart', function(){
+      $rootScope.$on('$stateChangeStart', function(){
         vm.isLoggedIn = Auth.isUserLoggedIn();
         Auth.getUserProfileInfo()
           .then(function(result){

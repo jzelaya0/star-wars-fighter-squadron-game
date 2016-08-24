@@ -3,33 +3,40 @@
   'use strict';
 
   angular
-    .module('appRoutes', ['ngRoute'])
-    .config(function($routeProvider, $locationProvider){
+    .module('appRoutes', ['ui.router'])
+    .config(function($stateProvider, $urlRouterProvider, $locationProvider){
 
-      $routeProvider
+      $urlRouterProvider.otherwise('/home');
+
+      $stateProvider
         // Route for home page
-        .when('/', {
+        .state('home', {
+          url: '/home',
           templateUrl: 'pages/_home.html'
         })
         // Route for sign up page
-        .when('/signup', {
+        .state('signup', {
+          url: '/signup',
           templateUrl: 'pages/_signup.html',
           controller: 'signUpController',
           controllerAs: 'signup'
         })
         // Route for login page
-        .when('/login', {
+        .state('login', {
+          url: '/login',
           templateUrl: 'pages/_login.html',
           controller: 'loginController',
           controllerAs: 'login'
         })
         // Route for main game page
-        .when('/game', {
+        .state('game', {
+          url: '/game',
           templateUrl: 'pages/_game.html',
         });
 
         // Remove url hash
         $locationProvider.html5Mode(true);
+
     });
 
 
