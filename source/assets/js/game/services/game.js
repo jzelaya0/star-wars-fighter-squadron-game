@@ -12,8 +12,8 @@
       var bank;
       var gameFactory = {};
       var ACCELERATION = 700;
-      var DRAG = 100;
-      var MAX_SPEED = 300;
+      var DRAG = 500;
+      var MAX_SPEED = 400;
 
       gameFactory.init = function(){
         game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameCanvas', {
@@ -60,6 +60,16 @@
           player.body.acceleration.x = -ACCELERATION;
         }else if (cursor.right.isDown) {
           player.body.acceleration.x = ACCELERATION;
+        }
+
+        // set boundries for player at screen edges
+        if (player.x > game.width - 40) {
+          player.x = game.width - 40;
+          player.body.acceleration.x = 0;
+        }
+        if (player.x < 40) {
+          player.x = 40;
+          player.body.acceleration.x = 0;
         }
 
         // set the ships "banking" here
