@@ -10,6 +10,7 @@
       'alertService',
       'authService',
       'userService',
+      'gameService',
       'signUpCtrl',
       'ui.bootstrap',
       'ngMessages'
