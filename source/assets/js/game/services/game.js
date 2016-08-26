@@ -8,7 +8,12 @@
       var game;
       var starfield;
       var player;
+      var cursor;
+      var bank;
       var gameFactory = {};
+      var ACCELERATION = 700;
+      var DRAG = 100;
+      var MAX_SPEED = 300;
 
       gameFactory.init = function(){
         game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameCanvas', {
@@ -33,11 +38,34 @@
           // set player as xwing pilot
           player =  game.add.sprite(400,500, 'x-wing');
           player.anchor.setTo(0.5,0.5);
+
+          // enable player movement
+          game.physics.enable(player, Phaser.Physics.ARCADE);
+          player.body.maxVelocity.setTo(MAX_SPEED, MAX_SPEED);
+          player.body.drag.setTo(DRAG, DRAG);
+          // add controls for user
+          cursor = game.input.keyboard.createCursorKeys();
       };
 
       gameFactory.update = function(){
         // Scroll the background
         starfield.tilePosition.y += 2;
+
+        //Reset player and then check if there is any movement
+        player.body.acceleration.x = 0;
+
+
+        // move the player left or right
+        if (cursor.left.isDown) {
+          player.body.acceleration.x = -ACCELERATION;
+        }else if (cursor.right.isDown) {
+          player.body.acceleration.x = ACCELERATION;
+        }
+
+        // set the ships "banking" here
+        bank = player.body.velocity.x / MAX_SPEED;
+        player.scale.x = 1 - Math.abs(bank) / 10;
+        player.angle = bank * 10;
       };
 
       return gameFactory;
