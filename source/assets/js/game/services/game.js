@@ -145,7 +145,8 @@
         player.angle = bank * 10;
 
         //check for collisions
-        game.physics.arcade.overlap(player, enemies, shipCollide, null, this);
+        game.physics.arcade.overlap(player, enemies, shipCollide, null, this); // ship collision
+        game.physics.arcade.overlap(enemies, xwingLaser, shootEnemy, null, this); // bullet collion on enemies
       };
 
       // Render
@@ -209,6 +210,20 @@
         explosion.play('kaboom', 30, false, true);
         enemy.kill();
       }
+
+      // Enemy hit
+      // ******************************
+      function shootEnemy(enemy, laser) {
+        var explosion = explosions.getFirstExists(false);
+
+        explosion.reset(laser.body.x + laser.body.halfWidth, laser.body.y + laser.body.halfHeight);
+        explosion.body.velocity.y = enemy.body.velocity.y;
+        explosion.alpha = 0.7;
+        explosion.play('kaboom', 30, false, true);
+        enemy.kill();
+        laser.kill();
+      }
+
 
       return gameFactory;
 
