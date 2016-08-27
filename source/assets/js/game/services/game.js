@@ -18,6 +18,7 @@
       var fireButton;
       var nextFire = 0;
       var enemies;
+      var explosions;
       var gameFactory = {};
       var LASER_VELOCITY = 700;
       var ACCELERATION = 700;
@@ -29,7 +30,7 @@
       // ******************************
       gameFactory.init = function(){
         game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameCanvas', {
-          preload: this.preload, create: this.create , update: this.update
+          preload: this.preload, create: this.create , update: this.update, render: this.render
         });
       };
 
@@ -42,6 +43,7 @@
           game.load.image('x-wing-laser', '../assets/images/ship_x-wing-laser.png');
           game.load.image('tie-fighter', '../assets/images/ship_tie-fighter.png');
           game.load.image('tie-fighter-laser', '../assets/images/ship_tie-fighter-laser.png');
+          game.load.spritesheet('kaboom', '../assets/images/sprite_explosion.png', 128, 128);
       };
 
 
@@ -86,8 +88,23 @@
           enemies.setAll('angle', 180);
           enemies.setAll('outOfBoundsKill', true);
           enemies.setAll('checkWorldBounds', true);
+          // size adjustment for more accurate collisions
+          enemies.forEach(function(enemy){
+            enemy.body.setSize(enemy.width * 3 / 4, enemy.height * 3 / 4);
+          });
 
           deployEnemies();
+
+          // explosions pool
+          explosions = game.add.group();
+          explosions.enableBody = true;
+          explosions.physicsBodyType = Phaser.Physics.ARCADE;
+          explosions.createMultiple(30, 'kaboom');
+          explosions.setAll('anchor.x', 0.5);
+          explosions.setAll('anchor.y', 0.5);
+          explosions.forEach(function(explosion){
+            explosion.animations.add('kaboom');
+          });
       };
 
       // Update the game
@@ -126,7 +143,22 @@
         bank = player.body.velocity.x / MAX_SPEED;
         player.scale.x = 1 - Math.abs(bank) / 10;
         player.angle = bank * 10;
+
+        //check for collisions
+        game.physics.arcade.overlap(player, enemies, shipCollide, null, this);
       };
+
+      // Render
+      // ******************************
+      function render(){
+
+        // debug for ship bounding boxes
+        for (var i = 0; i < enemies.length; i++) {
+          game.debug.body(enemies.children[i]);
+        }
+        player.debug.body(player);
+      }
+
 
 
       // Shoot the laser
@@ -165,6 +197,17 @@
         }
         // keep the imperials coming!
         game.time.events.add(game.rnd.integerInRange(MIN_ENEMY_SPACING, MAX_ENEMY_SPACING), deployEnemies);
+      }
+
+      // Ship collision detection
+      // ******************************
+      function shipCollide(player, enemy) {
+        var explosion = explosions.getFirstExists(false);
+        explosion.reset(enemy.body.x + enemy.body.halfWidth, enemy.body.y + enemy.body.halfHeight);
+        explosion.body.velocity.y = enemy.body.velocity.y;
+        explosion.alpha = 0.7;
+        explosion.play('kaboom', 30, false, true);
+        enemy.kill();
       }
 
       return gameFactory;
