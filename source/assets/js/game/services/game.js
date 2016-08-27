@@ -17,6 +17,7 @@
       var fireRate = 100;
       var fireButton;
       var nextFire = 0;
+      var enemies;
       var gameFactory = {};
       var LASER_VELOCITY = 700;
       var ACCELERATION = 700;
@@ -36,10 +37,11 @@
       // ******************************
       gameFactory.preload = function(){
           // load image assets
-          game.load.image('x-wing', '../assets/images/ship_x-wing.png');
-          game.load.image('tie-fighter', '../assets/images/tie-fighter-pixel.png');
           game.load.image('starfield', '../assets/images/bg_starfield.png');
+          game.load.image('x-wing', '../assets/images/ship_x-wing.png');
           game.load.image('x-wing-laser', '../assets/images/ship_x-wing-laser.png');
+          game.load.image('tie-fighter', '../assets/images/ship_tie-fighter.png');
+          game.load.image('tie-fighter-laser', '../assets/images/ship_tie-fighter-laser.png');
       };
 
 
@@ -73,6 +75,19 @@
           // add controls for user
           cursor = game.input.keyboard.createCursorKeys();
           fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+          // Imperial tie fighters settings
+          enemies = game.add.group();
+          enemies.enableBody = true;
+          enemies.physicsBodyType = Phaser.Physics.ARCADE;
+          enemies.createMultiple(5, 'tie-fighter');
+          enemies.setAll('anchor.x', 0.5);
+          enemies.setAll('anchor.y', 0.5);
+          enemies.setAll('angle', 180);
+          enemies.setAll('outOfBoundsKill', true);
+          enemies.setAll('checkWorldBounds', true);
+
+          deployEnemies();
       };
 
       // Update the game
@@ -126,12 +141,30 @@
           laser.body.velocity.y = -LASER_VELOCITY;
 
         }
-        // var laser = xwingLaser.getFirstExists(false);
-        //
-        // if (laser) {
-        //   laser.reset(player.x, player.y + 8);
-        //   laser.body.velocity.y = -LASER_VELOCITY;
-        // }
+      }
+
+      // Deploy
+      // ******************************
+      function deployEnemies() {
+        // Speed and spacing setttings for imperials
+        var MIN_ENEMY_SPACING = 500;
+        var MAX_ENEMY_SPACING = 1000;
+        var ENEMY_SPEED = 400;
+
+        var imperial = enemies.getFirstExists(false);
+        if (imperial) {
+          imperial.reset(game.rnd.integerInRange(0, game.width), -20);
+          imperial.body.velocity.x = game.rnd.integerInRange(-200, 200);
+          imperial.body.velocity.y = ENEMY_SPEED;
+          imperial.body.drag.x = 100;
+
+          // Allow ships to have a bit of rotation
+          imperial.update = function(){
+            imperial.angle = 180 - game.math.radToDeg(Math.atan2(imperial.body.velocity.x, imperial.body.velocity.y));
+          };
+        }
+        // keep the imperials coming!
+        game.time.events.add(game.rnd.integerInRange(MIN_ENEMY_SPACING, MAX_ENEMY_SPACING), deployEnemies);
       }
 
       return gameFactory;
