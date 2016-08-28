@@ -25,6 +25,8 @@
       var gameFactory = {};
       var tapRestart;
       var spaceRestart;
+      var score = 0;
+      var scoreText;
       var LASER_VELOCITY = 700;
       var ACCELERATION = 700;
       var DRAG = 500;
@@ -122,6 +124,19 @@
           shields.render = function(){
             shields.text = 'Shields ' + Math.max(player.health, 0 ) + "%";
           };
+
+          // Score display
+          scoreText = game.add.text(game.world.width - 150, 10, '', {
+            font: '20px Arial',
+            fill: '#ffc107',
+            fontWeight: 'bold'
+          });
+
+          scoreText.render = function(){
+            scoreText.text = 'Score: ' + score;
+          };
+
+          scoreText.render();
 
           // Game over display
           gameover = game.add.text(game.world.centerX, game.world.centerY, 'Game Over', {
@@ -261,6 +276,9 @@
         explosion.play('kaboom', 30, false, true);
         enemy.kill();
         laser.kill();
+
+        score += enemy.damageAmount * 10;
+        scoreText.render();
       }
 
       // Restart game
@@ -274,6 +292,8 @@
         player.revive();
         player.health = 100;
         shields.render();
+        score = 0;
+        scoreText.render();
 
         // hide game over text
         gameover.visible = false;
