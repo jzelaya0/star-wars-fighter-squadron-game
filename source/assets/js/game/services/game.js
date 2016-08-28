@@ -20,7 +20,11 @@
       var enemies;
       var explosions;
       var shields;
+      var enemyLaunchTimer;
+      var gameover;
       var gameFactory = {};
+      var tapRestart;
+      var spaceRestart;
       var LASER_VELOCITY = 700;
       var ACCELERATION = 700;
       var DRAG = 500;
@@ -96,7 +100,7 @@
             enemy.damageAmount = 20;
           });
 
-          deployEnemies();
+          game.time.events.add(1000, deployEnemies);
 
           // explosions pool
           explosions = game.add.group();
@@ -118,6 +122,15 @@
           shields.render = function(){
             shields.text = 'Shields ' + Math.max(player.health, 0 ) + "%";
           };
+
+          // Game over display
+          gameover = game.add.text(game.world.centerX, game.world.centerY, 'Game Over', {
+            font: '80px Arial',
+            fill: '#ffeb3b',
+            fontWeight: 'bold'
+          });
+          gameover.anchor.setTo(0.5, 0.5);
+          gameover.visible = false;
       };
 
       // Update the game
@@ -160,6 +173,16 @@
         //check for collisions
         game.physics.arcade.overlap(player, enemies, shipCollide, null, this); // ship collision
         game.physics.arcade.overlap(enemies, xwingLaser, shootEnemy, null, this); // bullet collion on enemies
+
+        // check for game over
+        if(!player.alive && gameover.visible === false){
+          gameover.visible = true;
+
+          var fadeInGameOver = game.add.tween(gameover);
+          fadeInGameOver.to({aplpha: 1}, 1000, Phaser.Easing.Quintic.Out);
+          fadeInGameOver.onComplete.add(setResetHandlers);
+          fadeInGameOver.start();
+        }
       };
 
       // Render
@@ -210,7 +233,7 @@
           };
         }
         // keep the imperials coming!
-        game.time.events.add(game.rnd.integerInRange(MIN_ENEMY_SPACING, MAX_ENEMY_SPACING), deployEnemies);
+        enemyLaunchTimer = game.time.events.add(game.rnd.integerInRange(MIN_ENEMY_SPACING, MAX_ENEMY_SPACING), deployEnemies);
       }
 
       // Ship collision detection
@@ -239,6 +262,37 @@
         enemy.kill();
         laser.kill();
       }
+
+      // Restart game
+      // ******************************
+      function resetGame(){
+        enemies.callAll('kill');
+        game.time.events.remove(enemyLaunchTimer);
+        game.time.events.add(1000, deployEnemies);
+
+        // bring the player back to life
+        player.revive();
+        player.health = 100;
+        shields.render();
+
+        // hide game over text
+        gameover.visible = false;
+
+      }
+
+
+      function setResetHandlers(){
+        // click for restart
+        tapRestart = game.input.onTap.addOnce(setRestart,this);
+        spaceRestart = fireButton.onDown.addOnce(setRestart, this);
+
+        function setRestart (){
+          tapRestart.detach();
+          spaceRestart.detach();
+          resetGame();
+        }
+      }
+
 
 
       return gameFactory;
