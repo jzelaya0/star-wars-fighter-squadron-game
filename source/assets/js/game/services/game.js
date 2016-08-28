@@ -19,6 +19,7 @@
       var nextFire = 0;
       var enemies;
       var explosions;
+      var shields;
       var gameFactory = {};
       var LASER_VELOCITY = 700;
       var ACCELERATION = 700;
@@ -68,6 +69,7 @@
 
           // set player as xwing pilot
           player =  game.add.sprite(400,500, 'x-wing');
+          player.health = 100;
           player.anchor.setTo(0.5,0.5);
 
           // enable player movement
@@ -91,6 +93,7 @@
           // size adjustment for more accurate collisions
           enemies.forEach(function(enemy){
             enemy.body.setSize(enemy.width * 3 / 4, enemy.height * 3 / 4);
+            enemy.damageAmount = 20;
           });
 
           deployEnemies();
@@ -105,6 +108,16 @@
           explosions.forEach(function(explosion){
             explosion.animations.add('kaboom');
           });
+
+          // Shield stats to display
+          shields = game.add.text(10, 10, 'Shields: ' + player.health + '%', {
+            font: '20px Arial',
+            fill: '#eee',
+            fontWeight: 'bold'
+          });
+          shields.render = function(){
+            shields.text = 'Shields ' + Math.max(player.health, 0 ) + "%";
+          };
       };
 
       // Update the game
@@ -125,7 +138,7 @@
         }
 
         // check for laser event
-        if(fireButton.isDown){
+        if(player.alive && fireButton.isDown){
           fireLaser();
         }
 
@@ -209,6 +222,9 @@
         explosion.alpha = 0.7;
         explosion.play('kaboom', 30, false, true);
         enemy.kill();
+
+        player.damage(enemy.damageAmount);
+        shields.render();
       }
 
       // Enemy hit
