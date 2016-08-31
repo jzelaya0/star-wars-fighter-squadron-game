@@ -27,6 +27,8 @@
       var spaceRestart;
       var score = 0;
       var scoreText;
+      var enemyLaser;
+      var tieFighterLaser;
       var LASER_VELOCITY = 700;
       var ACCELERATION = 700;
       var DRAG = 500;
@@ -49,8 +51,8 @@
           game.load.image('x-wing', '../assets/images/ship_x-wing.png');
           game.load.image('x-wing-laser', '../assets/images/ship_x-wing-laser.png');
           game.load.image('tie-fighter', '../assets/images/ship_tie-fighter.png');
-          game.load.image('tie-fighter-laser', '../assets/images/ship_tie-fighter-laser.png');
           game.load.spritesheet('kaboom', '../assets/images/sprite_explosion.png', 128, 128);
+          game.load.image('tie-fighter-laser', '../assets/images/ship_tie-fighter-laser.png');
       };
 
 
@@ -72,6 +74,15 @@
           xwingLaser.setAll('outOfBoundsKill', true);
           xwingLaser.setAll('checkWorldBounds', true);
 
+          //  Imperial bullets
+          tieFighterLaser = game.add.group();
+          tieFighterLaser.enableBody = true;
+          tieFighterLaser.physicsBodyType = Phaser.Physics.ARCADE;
+          tieFighterLaser.createMultiple(3, 'tie-fighter-laser');
+          tieFighterLaser.setAll('anchor.x', 0.5);
+          tieFighterLaser.setAll('anchor.y', 0);
+          tieFighterLaser.setAll('outOfBoundsKill', true);
+          tieFighterLaser.setAll('checkWorldBounds', true);
 
           // set player as xwing pilot
           player =  game.add.sprite(400,500, 'x-wing');
@@ -188,6 +199,7 @@
         //check for collisions
         game.physics.arcade.overlap(player, enemies, shipCollide, null, this); // ship collision
         game.physics.arcade.overlap(enemies, xwingLaser, shootEnemy, null, this); // bullet collion on enemies
+        game.physics.arcade.overlap(tieFighterLaser, player, enemyHitsPlayer, null, this); // bullet collision on player
 
         // check for game over
         if(!player.alive && gameover.visible === false){
@@ -237,6 +249,11 @@
 
         var imperial = enemies.getFirstExists(false);
         if (imperial) {
+          var laserSpeed = 500;
+          var firingDelay = 1000;
+          imperial.lasers = 1 ;
+          imperial.lastShot = 0;
+
           imperial.reset(game.rnd.integerInRange(0, game.width), -20);
           imperial.body.velocity.x = game.rnd.integerInRange(-200, 200);
           imperial.body.velocity.y = ENEMY_SPEED;
@@ -245,6 +262,17 @@
           // Allow ships to have a bit of rotation
           imperial.update = function(){
             imperial.angle = 180 - game.math.radToDeg(Math.atan2(imperial.body.velocity.x, imperial.body.velocity.y));
+
+            //  Fire laser
+            enemyLaser = tieFighterLaser.getFirstExists(false);
+            if (enemyLaser && this.alive && this.lasers && game.time.now > firingDelay + this.lastShot) {
+                  this.lastShot = game.time.now;
+                  this.lasers--;
+                  enemyLaser.reset(this.x, this.y);
+                  enemyLaser.damageAmount = this.damageAmount;
+                  enemyLaser.body.velocity.y = laserSpeed;
+              }
+
           };
         }
         // keep the imperials coming!
@@ -281,12 +309,25 @@
         scoreText.render();
       }
 
+      // Enemy shoots player
+      // ******************************
+      function enemyHitsPlayer (player, bullet) {
+          var explosion = explosions.getFirstExists(false);
+          explosion.reset(player.body.x + player.body.halfWidth, player.body.y + player.body.halfHeight);
+          explosion.play('kaboom', 30, false, true);
+          bullet.kill();
+
+          player.damage(bullet.damageAmount);
+          shields.render();
+      }
+
       // Restart game
       // ******************************
       function resetGame(){
         enemies.callAll('kill');
         game.time.events.remove(enemyLaunchTimer);
         game.time.events.add(1000, deployEnemies);
+        tieFighterLaser.callAll('kill');
 
         // bring the player back to life
         player.revive();
@@ -300,7 +341,8 @@
 
       }
 
-
+      // Reset handlers
+      // ******************************
       function setResetHandlers(){
         // click for restart
         tapRestart = game.input.onTap.addOnce(setRestart,this);
