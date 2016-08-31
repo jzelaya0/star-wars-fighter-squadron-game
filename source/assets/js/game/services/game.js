@@ -29,6 +29,10 @@
       var scoreText;
       var enemyLaser;
       var tieFighterLaser;
+      var music;
+      var xwingFx;
+      var tieFighterFx;
+      var kaboomFx;
       var LASER_VELOCITY = 700;
       var ACCELERATION = 700;
       var DRAG = 500;
@@ -53,6 +57,13 @@
           game.load.image('tie-fighter', '../assets/images/ship_tie-fighter.png');
           game.load.spritesheet('kaboom', '../assets/images/sprite_explosion.png', 128, 128);
           game.load.image('tie-fighter-laser', '../assets/images/ship_tie-fighter-laser.png');
+
+          // load audio assets
+          game.load.audio('bgMusic', '../assets/audio/song_starwars_remix.mp3');
+          game.load.audio('xwingFx', '../assets/audio/sound_xwing-gun.mp3');
+          game.load.audio('tieFighterFx', '../assets/audio/sound_tie-fighter-gun.mp3');
+          game.load.audio('kaboomFx', '../assets/audio/sound_explosion.mp3');
+
       };
 
 
@@ -63,6 +74,16 @@
 
           // add scrolling space background
           starfield = game.add.tileSprite(0, 0, world.width, world.height, 'starfield');
+
+          // Play background music
+          music = game.add.audio('bgMusic');
+          music.loop = true;
+          music.play();
+
+          // sound effects
+          xwingFx = game.add.audio('xwingFx');
+          tieFighterFx = game.add.audio('tieFighterFx');
+          kaboomFx = game.add.audio('kaboomFx');
 
           // player bullets
           xwingLaser = game.add.group();
@@ -157,6 +178,7 @@
           });
           gameover.anchor.setTo(0.5, 0.5);
           gameover.visible = false;
+
       };
 
       // Update the game
@@ -235,7 +257,7 @@
 
           laser.reset(player.x, player.y + 8);
           laser.body.velocity.y = -LASER_VELOCITY;
-
+          xwingFx.play();
         }
       }
 
@@ -271,6 +293,7 @@
                   enemyLaser.reset(this.x, this.y);
                   enemyLaser.damageAmount = this.damageAmount;
                   enemyLaser.body.velocity.y = laserSpeed;
+                  tieFighterFx.play();
               }
 
           };
@@ -287,6 +310,7 @@
         explosion.body.velocity.y = enemy.body.velocity.y;
         explosion.alpha = 0.7;
         explosion.play('kaboom', 30, false, true);
+        kaboomFx.play();
         enemy.kill();
 
         player.damage(enemy.damageAmount);
@@ -302,6 +326,7 @@
         explosion.body.velocity.y = enemy.body.velocity.y;
         explosion.alpha = 0.7;
         explosion.play('kaboom', 30, false, true);
+        kaboomFx.play();
         enemy.kill();
         laser.kill();
 
@@ -315,6 +340,7 @@
           var explosion = explosions.getFirstExists(false);
           explosion.reset(player.body.x + player.body.halfWidth, player.body.y + player.body.halfHeight);
           explosion.play('kaboom', 30, false, true);
+          kaboomFx.play();
           bullet.kill();
 
           player.damage(bullet.damageAmount);
@@ -354,7 +380,6 @@
           resetGame();
         }
       }
-
 
 
       return gameFactory;
