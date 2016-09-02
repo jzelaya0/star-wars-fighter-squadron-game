@@ -11,6 +11,10 @@
       'authService',
       'userService',
       'gameService',
+      'gameBootService',
+      'gameLoadService',
+      'gameMenuService',
+      'gamePlayService',
       'signUpCtrl',
       'ui.bootstrap',
       'ngMessages'

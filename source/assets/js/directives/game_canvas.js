@@ -13,6 +13,7 @@
         restrict: 'A',
         link: function(){
           // intialize the game
+          var game;
           Game.init();
         }
       };
