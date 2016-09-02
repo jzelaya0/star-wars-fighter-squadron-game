@@ -21,6 +21,12 @@
           // start game once all state are added
           game.state.start('boot');
 
+          // DESTROY GAME
+          function removeGame(){
+            game.destroy();
+          }
+          //Set removeGame to gameFactory;
+          this.removeGame = removeGame;
         };
 
       // return game factory
