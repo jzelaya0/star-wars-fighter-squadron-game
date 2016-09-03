@@ -31,6 +31,9 @@
     var xwingFx;
     var tieFighterFx;
     var kaboomFx;
+    var healthUp;
+    var healthUpFx;
+    var healthLaunchTimer;
     var LASER_VELOCITY = 700;
     var ACCELERATION = 700;
     var DRAG = 500;
@@ -54,6 +57,7 @@
       xwingFx = game.add.audio('xwingFx');
       tieFighterFx = game.add.audio('tieFighterFx');
       kaboomFx = game.add.audio('kaboomFx');
+      healthUpFx = game.add.audio('heartFX');
       // Explosion pool
       explosions = game.add.group();
       explosions.enableBody = true;
@@ -64,6 +68,17 @@
       explosions.forEach(function(explosion){
         explosion.animations.add('kaboom');
       });
+      // Heart containers
+      healthUp = game.add.group();
+      healthUp.enableBody = true;
+      healthUp.physicsBodyType = Phaser.Physics.ARCADE;
+      healthUp.createMultiple(5, 'heart');
+      healthUp.setAll('anchor.x', 0.5);
+      healthUp.setAll('anchor.y', 0.5);
+      healthUp.setAll('outOfBoundsKill', true);
+      healthUp.setAll('checkWorldBounds', true);
+      game.time.events.add(1000, this.deployHearts);
+
       // Player Settings
       // ******************************
       //Player is set as XWing Pilot
@@ -119,11 +134,18 @@
       // Shield stats to display
       shields = game.add.text(10, 10, 'Shields: ' + player.health + '%', {
         font: '20px Arial',
-        fill: '#eee',
+        fill: '#4caf50',
         fontWeight: 'bold'
       });
       shields.render = function(){
         shields.text = 'Shields ' + Math.max(player.health, 0 ) + "%";
+        if (player.health >= 100) {
+          shields.addColor('#4caf50', 0);
+        }else if (player.health === 60) {
+          shields.addColor('#fff000', 0);
+        }else if (player.health === 40) {
+          shields.addColor('#ff0000', 0);
+        }
       };
 
       // Score display
@@ -147,7 +169,6 @@
       });
       gameover.anchor.setTo(0.5, 0.5);
       gameover.visible = false;
-
     };
 
     // ================================================================================
@@ -185,6 +206,8 @@
       game.physics.arcade.overlap(player, enemies, this.shipCollide, null, this); // ship collision
       game.physics.arcade.overlap(enemies, xwingLaser, this.shootEnemy, null, this); // bullet collion on enemies
       game.physics.arcade.overlap(tieFighterLaser, player, this.enemyHitsPlayer, null, this); // bullet collision on player
+      game.physics.arcade.overlap(player, healthUp, this.healPlayer, null, this); // heart collision with player
+
       // Check if game is over
       if(!player.alive && gameover.visible === false){
         gameover.visible = true;
@@ -300,6 +323,36 @@
 
       player.damage(bullet.damageAmount);
       shields.render();
+    };
+
+    // Heart & player collison
+    // ******************************
+    playFactory.healPlayer = function(player, heart){
+      heart.reset(player.body.x, player.body.y);
+      heart.kill();
+      player.health  = 100;
+      healthUpFx.play();
+      shields.render();
+    };
+
+
+    // Deploy heart container
+    // ******************************
+    playFactory.deployHearts = function(){
+      var game = playFactory.game;
+      var HEART_SPEED = 300;
+      var DEPLOY_DELAY = 5000;
+
+      var heart = healthUp.getFirstExists(false);
+      // Launch only if player health is low
+      if (heart && player.health <= 40 && player.alive) {
+        heart.reset(game.rnd.integerInRange(0, game.width), -10);
+        heart.body.velocity.y = HEART_SPEED;
+      }
+
+      // Launch health containers
+      healthLaunchTimer = game.time.events.add(DEPLOY_DELAY, playFactory.deployHearts);
+
     };
 
     // Restart game
