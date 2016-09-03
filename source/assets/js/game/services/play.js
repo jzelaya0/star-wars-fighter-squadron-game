@@ -34,6 +34,8 @@
     var healthUp;
     var healthUpFx;
     var healthLaunchTimer;
+    var pause = false;
+    var pauseLabel;
     var LASER_VELOCITY = 700;
     var ACCELERATION = 700;
     var DRAG = 500;
@@ -53,6 +55,9 @@
       music = game.add.audio('bgMusic');
       music.loop = true;
       music.play();
+      //pause
+      pause = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+      pause.onDown.add(playFactory.togglePause,this);
       // Sound Effects
       xwingFx = game.add.audio('xwingFx');
       tieFighterFx = game.add.audio('tieFighterFx');
@@ -169,6 +174,19 @@
       });
       gameover.anchor.setTo(0.5, 0.5);
       gameover.visible = false;
+
+      // Game pause display
+      pauseLabel = game.add.text(game.world.centerX, game.world.centerY, 'PAUSED\nPress ENTER to Start', {
+        font: '50px Arial',
+        fill: '#f44336',
+        fontWeight: 'bold',
+        align: 'center',
+        shadowColor: '#444',
+        shadowFill: true,
+        shadowOffsetY: 5
+      });
+      pauseLabel.anchor.set(0.5);
+      pauseLabel.visible = false;
     };
 
     // ================================================================================
@@ -389,6 +407,13 @@
         spaceRestart.detach();
         playFactory.resetGame();
       }
+    };
+
+    // Toggle pause
+    playFactory.togglePause = function(){
+      var game = this.game;
+      pauseLabel.visible = !pauseLabel.visible;
+      game.paused = !game.paused;
     };
 
     return playFactory;
