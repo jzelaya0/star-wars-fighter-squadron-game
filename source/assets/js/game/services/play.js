@@ -123,7 +123,6 @@
       enemies.setAll('checkWorldBounds', true);
       // size adjustment for more accurate collisions
       enemies.forEach(function(enemy){
-        enemy.body.setSize(enemy.width * 3 / 4, enemy.height * 3 / 4);
         enemy.damageAmount = 20;
       });
       // Deploy Tie Fighters
@@ -137,6 +136,7 @@
       tieFighterLaser.setAll('anchor.y', 0);
       tieFighterLaser.setAll('outOfBoundsKill', true);
       tieFighterLaser.setAll('checkWorldBounds', true);
+
       // Game Text
       // ******************************
       // Shield stats to display
@@ -240,6 +240,27 @@
         fadeInGameOver.start();
       }
     };
+    // ================================================================================
+    // GAME RENDER
+    // ================================================================================
+
+    // // Debug ships
+    // // ******************************
+    // playFactory.render = function(game){
+    //   // Debug enemies
+    //   for (var i = 0; i < enemies.length; i++) {
+    //     game.debug.body(enemies.children[i]);
+    //   }
+    //   // Debug enemy lasers/
+    //   for (var j = 0; j < tieFighterLaser.length; j++) {
+    //     game.debug.body(tieFighterLaser.children[j]);
+    //   }
+    //   // Debug player
+    //   game.debug.body(player);
+    //   for (var x = 0; x < xwingLaser.length; x++) {
+    //     game.debug.body(xwingLaser.children[x]);
+    //   }
+    // };
 
     // ================================================================================
     // GAME HANDLERS
