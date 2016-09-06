@@ -37,8 +37,8 @@
     var pauseLabel;
     // Player ship settings
     var LASER_VELOCITY = 700;
-    var ACCELERATION = 700;
-    var DRAG = 500;
+    var ACCELERATION = 800;
+    var DRAG = 300;
     var MAX_SPEED = 400;
     // Enemy ship settings
     var tieFighterDeployTime = 3000;
@@ -213,16 +213,17 @@
       // Set boundries on player
       if(player.x > game.width - 40){
         player.x = game.width - 40;
-        player.body.acceleration.x = 0;
+        player.body.velocity.x = 0;
       }
       if (player.x < 40) {
         player.x = 40;
-        player.body.acceleration.x = 0;
+        player.body.velocity.x = 0;
       }
       // Bank the ship's movement
       bank = player.body.velocity.x / MAX_SPEED;
       player.scale.x = 1 - Math.abs(bank) / 10;
       player.angle = bank * 10;
+
       // Collision detection
       game.physics.arcade.overlap(player, enemies, this.shipCollide, null, this); // ship collision
       game.physics.arcade.overlap(enemies, xwingLaser, this.shootEnemy, null, this); // bullet collion on enemies
@@ -271,7 +272,7 @@
         imperial.lastShot = 0;
 
         imperial.reset(game.rnd.integerInRange(0, game.width), -20);
-        imperial.body.velocity.x = game.rnd.integerInRange(-200, 200);
+        imperial.body.velocity.x = game.rnd.integerInRange(-tieFighterSpeed, tieFighterSpeed);
         imperial.body.velocity.y = tieFighterSpeed;
         imperial.body.drag.x = 100;
 
