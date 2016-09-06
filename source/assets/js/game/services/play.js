@@ -8,7 +8,6 @@
     var playFactory = {};
     //GAME VARIABLES
     var starfield;
-    var game = playFactory.game;
     var player;
     var cursor;
     var bank;
@@ -36,10 +35,14 @@
     var healthLaunchTimer;
     var pause = false;
     var pauseLabel;
+    // Player ship settings
     var LASER_VELOCITY = 700;
     var ACCELERATION = 700;
     var DRAG = 500;
     var MAX_SPEED = 400;
+    // Enemy ship settings
+    var tieFighterDeployTime = 3000;
+    var tieFighterSpeed = 300;
 
 
     // ================================================================================
@@ -235,7 +238,6 @@
         fadeInGameOver.onComplete.add(playFactory.setResetHandlers);
         fadeInGameOver.start();
       }
-
     };
 
     // ================================================================================
@@ -260,21 +262,17 @@
     // ******************************
     playFactory.deployEnemies = function() {
       var game = playFactory.game;
-      // Speed and spacing setttings for imperials
-      var MIN_ENEMY_SPACING = 500;
-      var MAX_ENEMY_SPACING = 1000;
-      var ENEMY_SPEED = 400;
 
       var imperial = enemies.getFirstExists(false);
       if (imperial) {
-        var laserSpeed = 500;
+        var laserSpeed = tieFighterSpeed + 100;
         var firingDelay = 1000;
         imperial.lasers = 1 ;
         imperial.lastShot = 0;
 
         imperial.reset(game.rnd.integerInRange(0, game.width), -20);
         imperial.body.velocity.x = game.rnd.integerInRange(-200, 200);
-        imperial.body.velocity.y = ENEMY_SPEED;
+        imperial.body.velocity.y = tieFighterSpeed;
         imperial.body.drag.x = 100;
 
         // Allow ships to have a bit of rotation
@@ -295,7 +293,7 @@
         };
       }
       // keep the imperials coming!
-      enemyLaunchTimer = game.time.events.add(game.rnd.integerInRange(MIN_ENEMY_SPACING, MAX_ENEMY_SPACING), playFactory.deployEnemies);
+      enemyLaunchTimer = game.time.events.add(game.rnd.integerInRange(500, tieFighterDeployTime), playFactory.deployEnemies);
     };
     //
     // Ship collision detection
@@ -326,8 +324,12 @@
       enemy.kill();
       laser.kill();
 
+      // Show damabe amount on player
       score += enemy.damageAmount * 10;
       scoreText.render();
+
+      //Check player score for game pacing
+      this.setGameDifficulty();
     };
 
     // Enemy shoots player
@@ -389,6 +391,10 @@
       score = 0;
       scoreText.render();
 
+      // Reset game difficulty
+      tieFighterDeployTime = 3000;
+      tieFighterSpeed = 300;
+
       // hide game over text
       gameover.visible = false;
 
@@ -410,10 +416,33 @@
     };
 
     // Toggle pause
+    // ******************************
     playFactory.togglePause = function(){
       var game = this.game;
       pauseLabel.visible = !pauseLabel.visible;
       game.paused = !game.paused;
+    };
+
+    // Set game difficulty
+    // ******************************
+    playFactory.setGameDifficulty = function(){
+      switch (score) {
+        case 2000:
+          tieFighterDeployTime = 2500;
+          tieFighterSpeed = 325;
+          break;
+        case 4000:
+          tieFighterDeployTime = 2000;
+          tieFighterSpeed = 350;
+          break;
+        case 6000:
+          tieFighterDeployTime = 1500;
+          tieFighterSpeed = 400;
+          break;
+        case 8000:
+          tieFighterDeployTime = 1000;
+          break;
+      }
     };
 
     return playFactory;
