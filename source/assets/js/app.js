@@ -15,6 +15,7 @@
       'gameLoadService',
       'gameMenuService',
       'gamePlayService',
+      'playerStatsService',
       'signUpCtrl',
       'ui.bootstrap',
       'ngMessages'

@@ -4,7 +4,7 @@
   'use strict';
 
   angular.module('gamePlayService',[])
-  .factory('playState', function(){
+  .factory('playState', function(PlayerStats){
     var playFactory = {};
     //GAME VARIABLES
     var starfield;
@@ -35,6 +35,7 @@
     var healthLaunchTimer;
     var pause = false;
     var pauseLabel;
+    var kills = 0;
     // Player ship settings
     var LASER_VELOCITY = 700;
     var ACCELERATION = 800;
@@ -238,6 +239,15 @@
         fadeInGameOver.to({aplpha: 1}, 1000, Phaser.Easing.Quintic.Out);
         fadeInGameOver.onComplete.add(playFactory.setResetHandlers);
         fadeInGameOver.start();
+
+        // Set score and kills
+        var stats = {
+          score: score,
+          kills: kills,
+        };
+        // Set player score and kills;
+        PlayerStats.setPlayerStats(stats);
+        console.log(PlayerStats.setPlayerStats(stats));
       }
     };
     // ================================================================================
@@ -352,6 +362,9 @@
 
       //Check player score for game pacing
       this.setGameDifficulty();
+
+      // Increase enemy kills;
+      kills ++;
     };
 
     // Enemy shoots player
@@ -419,6 +432,9 @@
 
       // hide game over text
       gameover.visible = false;
+
+      // reset kills
+      kills = 0;
 
     };
 
