@@ -18,6 +18,7 @@
       game.load.spritesheet('kaboom', '../assets/images/sprite_explosion.png', 128, 128);
       game.load.image('tie-fighter-laser', '../assets/images/ship_tie-fighter-laser.png');
       game.load.image('heart', '../assets/images/sprite_heart.png');
+      game.load.image('asteroid', '../assets/images/sprite_asteroid.png');
 
       // load audio assets
       game.load.audio('bgMusic', '../assets/audio/song_starwars_remix.mp3');
