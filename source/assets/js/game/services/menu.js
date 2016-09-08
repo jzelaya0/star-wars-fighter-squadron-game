@@ -13,7 +13,7 @@
 
         //Game title
         var nameLabel = game.add.text(game.world.centerX, 250, 'Star Wars\nFighter Squadron', {
-          font: '50px Arial',
+          font: '50px sf_distant_galaxyregular',
           fill: '#ffc107'
         });
 

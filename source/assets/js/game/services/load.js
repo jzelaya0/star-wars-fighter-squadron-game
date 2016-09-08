@@ -31,7 +31,9 @@
     // Create Menu state
     // ******************************
     loadFactory.create = function(game){
-      game.state.start('menu');
+      game.time.events.add(1000, function(){
+        game.state.start('menu');
+      });
     };
 
     // return loadFactory
