@@ -8,8 +8,9 @@
 
     .factory('Game', function(bootState, loadState, menuState, playState){
       var gameFactory = {};
+      var game;
         // initialize game
-        gameFactory.init = function(game){
+        gameFactory.init = function(){
           game = new Phaser.Game(800, 600, Phaser.AUTO, 'gameCanvas');
 
           // Set game states

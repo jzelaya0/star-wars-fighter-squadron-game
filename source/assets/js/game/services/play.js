@@ -7,23 +7,19 @@
   .factory('playState', function(PlayerStats){
     var playFactory = {};
     //GAME VARIABLES
-    var starfield;
+    // var starfield;
     var player;
+    var scoreText;
     var cursor;
     var bank;
     var xwingLaser;
-    var fireRate = 100;
     var fireButton;
-    var nextFire = 0;
     var enemies;
     var explosions;
     var shields;
-    var enemyLaunchTimer;
     var gameover;
     var tapRestart;
     var spaceRestart;
-    var score = 0;
-    var scoreText;
     var enemyLaser;
     var tieFighterLaser;
     var music;
@@ -32,22 +28,9 @@
     var kaboomFx;
     var healthUp;
     var healthUpFx;
-    var healthLaunchTimer;
-    var pause = false;
+    var pause;
     var pauseLabel;
-    var kills = 0;
-    // Player ship settings
-    var LASER_VELOCITY = 700;
-    var ACCELERATION = 800;
-    var DRAG = 300;
-    var MAX_SPEED = 400;
-    // Enemy ship settings
-    var tieFighterDeployTime = 3000;
-    var tieFighterSpeed = 300;
-    // Asteroid settings
     var asteroids;
-    var asteroidLaunchTimer;
-    var asteroidDeployTime = 3000;
 
 
 
@@ -55,11 +38,12 @@
     // GAME CREATE
     // ================================================================================
     playFactory.create = function(game){
+      var g = game.global;
       // Game Settings
       // ******************************
       var world = game;
       // Game background
-      starfield = game.add.tileSprite(0, 0, world.width, world.height, 'starfield');
+      g.starfield = game.add.tileSprite(0, 0, world.width, world.height, 'starfield');
       // Play background music
       music = game.add.audio('bgMusic');
       music.loop = true;
@@ -113,8 +97,8 @@
       player.anchor.setTo(0.5, 0.5);
       // Set velocity and drag for player
       game.physics.enable(player, Phaser.Physics.ARCADE);
-      player.body.maxVelocity.setTo(MAX_SPEED, MAX_SPEED);
-      player.body.drag.setTo(DRAG, DRAG);
+      player.body.maxVelocity.setTo(g.maxspeed, g.maxspeed);
+      player.body.drag.setTo(g.drag, g.drag);
       // Player controls
       cursor = game.input.keyboard.createCursorKeys();
       fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -182,7 +166,7 @@
       });
 
       scoreText.render = function(){
-        scoreText.text = 'Score: ' + score;
+        scoreText.text = 'Score: ' + g.score;
       };
 
       scoreText.render();
@@ -214,15 +198,16 @@
     // GAME UPDATE
     // ================================================================================
     playFactory.update = function(game){
+      var g = game.global;
       // Scroll the background
-      starfield.tilePosition.y += 2;
+      g.starfield.tilePosition.y += 2;
       //Reset player and then check if there is any movement
       player.body.acceleration.x = 0;
       // move the player left or right
       if (cursor.left.isDown) {
-        player.body.acceleration.x = -ACCELERATION;
+        player.body.acceleration.x = -g.acceleration;
       }else if (cursor.right.isDown) {
-        player.body.acceleration.x = ACCELERATION;
+        player.body.acceleration.x = g.acceleration;
       }
       // check for laser event
       if(player.alive && fireButton.isDown){
@@ -238,7 +223,7 @@
         player.body.velocity.x = 0;
       }
       // Bank the ship's movement
-      bank = player.body.velocity.x / MAX_SPEED;
+      bank = player.body.velocity.x / g.maxspeed;
       player.scale.x = 1 - Math.abs(bank) / 10;
       player.angle = bank * 10;
 
@@ -261,8 +246,8 @@
 
         // Set score and kills
         var stats = {
-          score: score,
-          kills: kills
+          score: g.score,
+          kills: g.kills
         };
         // Set player score and kills;
         PlayerStats.setPlayerStats(stats);
@@ -302,14 +287,15 @@
     // Shoot the laser
     // ******************************
     playFactory.fireLaser = function() {
-      var game = playFactory.game;
+      var game = this.game;
+      var g = game.global;
 
-      if(game.time.now > nextFire && xwingLaser.countDead() > 0){
-        nextFire = game.time.now + fireRate;
+      if(game.time.now > g.nextFire && xwingLaser.countDead() > 0){
+        g.nextFire = game.time.now + g.fireRate;
         var laser = xwingLaser.getFirstDead();
 
         laser.reset(player.x, player.y + 8);
-        laser.body.velocity.y = -LASER_VELOCITY;
+        laser.body.velocity.y = -g.laserVelocity;
         xwingFx.play();
       }
     };
@@ -322,17 +308,18 @@
     // ******************************
     playFactory.deployEnemies = function() {
       var game = playFactory.game;
+      var g = game.global;
 
       var imperial = enemies.getFirstExists(false);
       if (imperial) {
-        var laserSpeed = tieFighterSpeed + 100;
+        var laserSpeed = g.tieFighterSpeed + 100;
         var firingDelay = 1000;
         imperial.lasers = 1 ;
         imperial.lastShot = 0;
 
         imperial.reset(game.rnd.integerInRange(0, game.width), -20);
-        imperial.body.velocity.x = game.rnd.integerInRange(-tieFighterSpeed, tieFighterSpeed);
-        imperial.body.velocity.y = tieFighterSpeed;
+        imperial.body.velocity.x = game.rnd.integerInRange(-g.tieFighterSpeed, g.tieFighterSpeed);
+        imperial.body.velocity.y = g.tieFighterSpeed;
         imperial.body.drag.x = 100;
 
         // Allow ships to have a bit of rotation
@@ -353,13 +340,14 @@
         };
       }
       // keep the imperials coming!
-      enemyLaunchTimer = game.time.events.add(game.rnd.integerInRange(500, tieFighterDeployTime), playFactory.deployEnemies);
+      g.enemyLaunchTimer = game.time.events.add(game.rnd.integerInRange(500, g.tieFighterDeployTime), playFactory.deployEnemies);
     };
 
     // Deploy heart container
     // ******************************
     playFactory.deployHearts = function(){
       var game = playFactory.game;
+      var g = game.global;
       var HEART_SPEED = 300;
       var DEPLOY_DELAY = 5000;
 
@@ -371,7 +359,7 @@
       }
 
       // Launch health containers
-      healthLaunchTimer = game.time.events.add(DEPLOY_DELAY, playFactory.deployHearts);
+      g.healthLaunchTimer = game.time.events.add(DEPLOY_DELAY, playFactory.deployHearts);
 
     };
 
@@ -379,6 +367,7 @@
     // ******************************
     playFactory.deployAsteroids = function(){
       var game = playFactory.game;
+      var g = game.global;
       var ASTEROID_SPEED = 250;
 
       var asteroid = asteroids.getFirstExists(false);
@@ -394,7 +383,7 @@
       };
 
       // Launch asteroids
-      asteroidLaunchTimer = game.time.events.add(asteroidDeployTime, playFactory.deployAsteroids);
+      g.asteroidLaunchTimer = game.time.events.add(g.asteroidDeployTime, playFactory.deployAsteroids);
 
     };
 
@@ -404,7 +393,7 @@
 
     // Player ship collides with enemy or asteroid
     // ******************************
-      playFactory.shipCollide = function(player, obj) {
+    playFactory.shipCollide = function(player, obj) {
       var explosion = explosions.getFirstExists(false);
       explosion.reset(obj.body.x + obj.body.halfWidth, obj.body.y + obj.body.halfHeight);
       explosion.body.velocity.y = obj.body.velocity.y;
@@ -419,7 +408,8 @@
 
     // Enemy or Asteroid shot by player
     // ******************************
-      playFactory.hitByPlayer = function(obj, laser) {
+    playFactory.hitByPlayer = function(obj, laser) {
+      var g = this.game.global;
       var explosion = explosions.getFirstExists(false);
 
       explosion.reset(laser.body.x + laser.body.halfWidth, laser.body.y + laser.body.halfHeight);
@@ -431,7 +421,7 @@
       laser.kill();
 
       // Show damabe amount on player
-      score += obj.damageAmount * 10;
+      g.score += obj.damageAmount * 10;
       scoreText.render();
 
       //Check player score for game pacing
@@ -439,7 +429,7 @@
 
       // Increase enemy kills;
       if (obj.key === 'tie-fighter') {
-        kills ++;
+        g.kills ++;
       }
     };
 
@@ -474,10 +464,11 @@
     // Restart game
     // ******************************
     playFactory.resetGame = function(){
-      var game = playFactory.game;
+      var game = this.game;
+      var g = game.global;
       enemies.callAll('kill');
-      game.time.events.remove(enemyLaunchTimer);
-      game.time.events.remove(asteroidLaunchTimer);
+      game.time.events.remove(g.enemyLaunchTimer);
+      game.time.events.remove(g.asteroidLaunchTimer);
       game.time.events.add(1000, this.deployEnemies);
       game.time.events.add(1000, this.deployAsteroids);
       tieFighterLaser.callAll('kill');
@@ -486,19 +477,19 @@
       player.revive();
       player.health = 100;
       shields.render();
-      score = 0;
+      g.score = 0;
       scoreText.render();
 
       // Reset game difficulty
-      tieFighterDeployTime = 3000;
-      tieFighterSpeed = 300;
-      asteroidDeployTime = 3000;
+      g.tieFighterDeployTime = 3000;
+      g.tieFighterSpeed = 300;
+      g.asteroidDeployTime = 3000;
 
       // hide game over text
       gameover.visible = false;
 
       // reset kills
-      kills = 0;
+      g.kills = 0;
 
     };
 
@@ -529,26 +520,27 @@
     // ******************************
     playFactory.setGameDifficulty = function(){
       var game = this.game;
-      switch (score) {
+      var g = game.global;
+      switch (g.score) {
         case 2000:
-          tieFighterDeployTime = 2500;
-          tieFighterSpeed = 325;
+          g.tieFighterDeployTime = 2500;
+          g.tieFighterSpeed = 325;
           // Launch asteroids
           game.time.events.add(1000, this.deployAsteroids);
           break;
         case 4000:
-          tieFighterDeployTime = 2000;
-          tieFighterSpeed = 350;
-          asteroidDeployTime = 2500;
+          g.tieFighterDeployTime = 2000;
+          g.tieFighterSpeed = 350;
+          g.asteroidDeployTime = 2500;
           break;
         case 6000:
-          tieFighterDeployTime = 1500;
-          tieFighterSpeed = 400;
-          asteroidDeployTime = 2000;
+          g.tieFighterDeployTime = 1500;
+          g.tieFighterSpeed = 400;
+          g.asteroidDeployTime = 2000;
           break;
         case 8000:
-          tieFighterDeployTime = 1000;
-          asteroidDeployTime = 1000;
+          g.tieFighterDeployTime = 1000;
+          g.asteroidDeployTime = 1000;
           break;
       }
     };
