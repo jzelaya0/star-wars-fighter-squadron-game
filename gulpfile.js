@@ -34,7 +34,8 @@ var src = {
   images: 'source/assets/images/**/*.+(png|jpg|jpeg|gif|svg)',
   audio:  'source/assets/audio/**/*.+(mp3|ogg|wav)',
   templates: 'source/templates/**/*.pug',
-  homePage: 'source/index.html'
+  homePage: 'source/index.html',
+  fonts: 'source/assets/fonts/*.{eot,svg,ttf,woff,woff2}'
 };
 
 // build
@@ -48,7 +49,8 @@ var build = {
   audio: 'public/assets/audio/',
   pages: 'public/pages/',
   homePage: 'public/',
-  libsfonts: 'public/assets/libs/fonts/'
+  libsfonts: 'public/assets/libs/fonts/',
+  fonts: 'public/assets/fonts'
 };
 
 // ==================================================
@@ -226,6 +228,12 @@ gulp.task('bowerBuild', function(){
     .pipe(flatten())
     .pipe(gulp.dest(build.libsfonts));
 });
+// TASK: BUILD FONTS
+// ************************
+gulp.task('fontsBuild', function(){
+  return gulp.src(src.fonts)
+    .pipe(gulp.dest(build.fonts));
+});
 
 // TASK: BUILD IMAGES
 // ************************
@@ -251,7 +259,7 @@ gulp.task('browserReload', function(done){
 
 // TASK: ALL ASSET BUILDS
 // ************************
-gulp.task('assetsBuild', ['imagesBuild', 'audioBuild', 'bowerBuild']);
+gulp.task('assetsBuild', ['imagesBuild', 'audioBuild', 'bowerBuild', 'fontsBuild']);
 
 // TASK: HEROKU POSTBUILD
 // ************************
