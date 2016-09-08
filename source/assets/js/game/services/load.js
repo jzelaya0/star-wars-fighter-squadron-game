@@ -26,6 +26,22 @@
       game.load.audio('tieFighterFx', '../assets/audio/sound_tie-fighter-gun.mp3');
       game.load.audio('kaboomFx', '../assets/audio/sound_explosion.mp3');
       game.load.audio('heartFX', '../assets/audio/sound_heart.mp3');
+
+      this.showLoadingText();
+    };
+
+    // Create Menu state
+    // ******************************
+    loadFactory.showLoadingText = function(){
+      var game = this.game;
+      var loadingText = game.add.text(game.world.centerX, game.world.centerY, 'Loading...', {
+        font: '40px Arial',
+        fill: 'rgb(75, 213, 238)'
+      });
+      loadingText.anchor.set(0.5);
+      loadingText.alpha = 0;
+      var loadingTweenIn = game.add.tween(loadingText).to({ alpha: 1 }, 500, Phaser.Easing.Linear.Out);
+      loadingTweenIn.start();
     };
 
     // Create Menu state
