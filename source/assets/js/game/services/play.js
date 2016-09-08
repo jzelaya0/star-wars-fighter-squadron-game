@@ -469,8 +469,8 @@
       enemies.callAll('kill');
       game.time.events.remove(g.enemyLaunchTimer);
       game.time.events.remove(g.asteroidLaunchTimer);
+      game.time.events.remove(this.deployAsteroids);
       game.time.events.add(1000, this.deployEnemies);
-      game.time.events.add(1000, this.deployAsteroids);
       tieFighterLaser.callAll('kill');
 
       // bring the player back to life
