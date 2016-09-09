@@ -267,6 +267,7 @@ gulp.task('herokuBuild', [
   'imagesBuild',
   'audioBuild',
   'bowerBuild',
+  'fontsBuild',
   'homepageBuild',
   'pagesBuild',
   'cssBuild',
