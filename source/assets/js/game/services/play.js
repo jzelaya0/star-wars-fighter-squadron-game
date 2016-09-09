@@ -47,7 +47,9 @@
       // Play background music
       music = game.add.audio('bgMusic');
       music.loop = true;
-      music.play();
+      game.time.events.add(1000, function(){
+        music.play();
+      });
       //pause
       pause = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
       pause.onDown.add(playFactory.togglePause,this);
@@ -173,20 +175,22 @@
 
       // Game over display
       gameover = game.add.text(game.world.centerX, game.world.centerY, 'Game Over', {
-        font: '80px Arial',
-        fill: '#ffeb3b',
-        fontWeight: 'bold'
+        font: '80px sf_distant_galaxyregular',
+        stroke: '#ffeb3b',
+        fill: '#000',
+        strokeThickness: 10,
+        align: 'center'
       });
       gameover.anchor.setTo(0.5, 0.5);
       gameover.visible = false;
 
       // Game pause display
       pauseLabel = game.add.text(game.world.centerX, game.world.centerY, 'PAUSED\nPress ENTER to Start', {
-        font: '50px Arial',
-        fill: '#f44336',
+        font: '30px Arial',
+        fill: 'rgb(75, 213, 238)',
         fontWeight: 'bold',
         align: 'center',
-        shadowColor: '#444',
+        shadowColor: '#000',
         shadowFill: true,
         shadowOffsetY: 5
       });
@@ -238,9 +242,9 @@
       // Check if game is over
       if(!player.alive && gameover.visible === false){
         gameover.visible = true;
-
+        gameover.alpha = 0;
         var fadeInGameOver = game.add.tween(gameover);
-        fadeInGameOver.to({aplpha: 1}, 1000, Phaser.Easing.Quintic.Out);
+        fadeInGameOver.to({alpha: 1}, 1000, Phaser.Easing.Quintic.Out);
         fadeInGameOver.onComplete.add(playFactory.setResetHandlers);
         fadeInGameOver.start();
 
