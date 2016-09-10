@@ -1,3 +1,18 @@
 //- source/templates/_game.pug
-div.col-sm-12
-  div(id="gameCanvas", game-canvas)
+div.row
+  div.col-sm-12
+    div.canvas-container
+      div(class="btn-group btn-group-justified")
+        //- Game instructions
+        div.btn-group
+          button(class="btn btn-default" ui-sref=".stats") How to Play
+        //- Save scores
+        div.btn-group
+          button(class="btn btn-success" ng-click='game.saveStats()' ui-sref=".stats") Save Scores
+        //- Stats
+        div.btn-group
+          button(class="btn btn-primary" ng-click='game.showStatsPanel()' ui-sref=".stats") Highest Scores
+      //- Stats panel view
+      <div ui-view ng-if="game.showStats" class="panel panel-primary pop-up-panel panel-right"></div>
+      //- Game Canvas
+      div(id="gameCanvas", game-canvas)

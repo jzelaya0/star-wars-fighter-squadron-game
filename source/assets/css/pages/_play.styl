@@ -1,7 +1,23 @@
 // source/assets/css/pages/_play.styl
 
-#gameCanvas
-  canvas
-    margin 0 auto
-    box-shadow 15px 15px 15px $shadow
-    border 10px solid $boulder
+.canvas-container
+  width 800px
+  margin 0 auto
+  position relative
+  #gameCanvas
+    canvas
+      margin 0 auto 20px auto
+      box-shadow 15px 15px 15px $shadow
+      border 10px solid $boulder
+  .pop-up-panel
+    position absolute
+    min-width 250px
+    max-width 350px
+    bottom 0
+    margin 0
+    h3
+      text-transform capitalize
+  .panel-right
+    right 0
+  .panel-left
+    left 0

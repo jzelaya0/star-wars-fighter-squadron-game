@@ -32,6 +32,13 @@
         .state('game', {
           url: '/game',
           templateUrl: 'pages/_game.html',
+          controller: 'gameController',
+          controllerAs: 'game'
+        })
+        // Nested game view for player Stats
+        .state('game.stats', {
+          templateUrl: 'pages/game/_player-stats.html',
+
         });
 
         // Remove url hash

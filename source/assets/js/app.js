@@ -7,6 +7,7 @@
       'appRoutes',
       'mainCtrl',
       'loginCtrl',
+      'gameCtrl',
       'alertService',
       'authService',
       'userService',

@@ -1,0 +1,15 @@
+//- source/templates/game/_player-stats.pug
+
+div.panel-heading
+  span(class="glyphicon glyphicon-remove-sign pull-right" ng-click='game.showStats = !game.showStats')
+  h3.
+    {{main.user.username}}'s Scores
+div.panel-body
+  table(class="table table-striped table-hover")
+    tbody
+      tr.active
+        td Current Highest Score
+        td {{game.playerStats.highestScore}}
+      tr.active
+        td Current Kills
+        td {{game.playerStats.mostKills}}
