@@ -8,6 +8,7 @@
       var vm = this;
       var main = $scope.main;
       vm.showStats = false;
+      vm.showHowToPlay = false;
 
       // Get player stats from local storage
       // ******************************
@@ -27,6 +28,11 @@
         }
       };
 
+      // Toggle game instructions
+      // ******************************
+      vm.toggleHowToPlay = function(){
+        vm.showHowToPlay = !vm.showHowToPlay;
+      };
       // Save user's high score and kills
       // ******************************
       vm.saveStats = function(){

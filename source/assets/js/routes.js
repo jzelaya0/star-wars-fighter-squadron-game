@@ -31,14 +31,22 @@
         // Route for main game page
         .state('game', {
           url: '/game',
-          templateUrl: 'pages/_game.html',
-          controller: 'gameController',
-          controllerAs: 'game'
-        })
-        // Nested game view for player Stats
-        .state('game.stats', {
-          templateUrl: 'pages/game/_player-stats.html',
-
+          views: {
+            // Root game page
+            '': {
+              templateUrl: 'pages/_game.html',
+              controller: 'gameController',
+              controllerAs: 'game'
+            },
+            // Stats panel
+            'stats@game': {
+              templateUrl: 'pages/game/_player-stats.html',
+            },
+            // Game instructions panel
+            'howToPlay@game': {
+              templateUrl: 'pages/game/_how-to-play.html'
+            }
+          }
         });
 
         // Remove url hash

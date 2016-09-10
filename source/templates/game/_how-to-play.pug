@@ -1,0 +1,26 @@
+//- source/templates/game/_how-to-play.pug
+
+div.panel-heading
+  span(class="glyphicon glyphicon-remove-sign pull-right" ng-click='game.toggleHowToPlay()')
+  h3.
+    Game Controls
+div.panel-body
+  table(class="table table-striped table-hover")
+    tbody
+      tr
+        td Move Left
+        td
+          span(class="glyphicon glyphicon-arrow-left")
+      tr
+        td Move Right
+        td
+          span(class="glyphicon glyphicon-arrow-right")
+      tr
+        td Fire
+        td SPACEBAR
+      tr
+        td Pause
+        td ENTER
+      tr
+        td Restart
+        td SPACEBAR
