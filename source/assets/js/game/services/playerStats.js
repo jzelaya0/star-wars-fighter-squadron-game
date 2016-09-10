@@ -14,7 +14,7 @@
       playerStatsFactory.setPlayerStats = function(stats){
         var storageStats = this.getPlayerStats();
         // Only set if score and kills are highter
-        if (storageStats === null || stats.score > storageStats.score || stats.kills > storageStats.kills) {
+        if (storageStats === null || stats.highestScore > storageStats.highestScore || stats.mostKills > storageStats.mostKills) {
           $window.localStorage.setItem(PLAYER_STATS, JSON.stringify(stats));
         }
       };

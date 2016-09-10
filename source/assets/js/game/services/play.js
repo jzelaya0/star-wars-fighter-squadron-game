@@ -250,8 +250,8 @@
 
         // Set score and kills
         var stats = {
-          score: g.score,
-          kills: g.kills
+          highestScore: g.score,
+          mostKills: g.kills
         };
         // Set player score and kills;
         PlayerStats.setPlayerStats(stats);
