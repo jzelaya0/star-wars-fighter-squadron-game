@@ -8,7 +8,7 @@
     // ==================================================
     // FACTORY FOR LOGGING IN & OUT
     // ==================================================
-    .factory('Auth', function($q, $http, AuthToken){
+    .factory('Auth', function($q, $http, AuthToken, PlayerStats){
       // create empty factory object
       var authFactory = {};
 
@@ -33,6 +33,8 @@
       authFactory.logUserOut = function(){
         // remove the token
         AuthToken.setUserToken();
+        // remove the player stats
+        PlayerStats.removePlayerStats();
       };
 
       // Check if user is logged in
