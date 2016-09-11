@@ -53,7 +53,8 @@ router.route('/:user_id')
       if(req.body.username) user.username = req.body.username;
       if(req.body.email) user.email = req.body.email;
       if(req.body.password) user.password = req.body.password;
-      if(req.body.highestScore) user.highestScore = req.body.highestScore;
+      if(req.body.highestScore && user.highestScore < req.body.highestScore) user.highestScore = req.body.highestScore;
+      if(req.body.mostKills && user.mostKills < req.body.mostKills) user.mostKills = req.body.mostKills;
 
       user.save(function(err){
         if (err) {
