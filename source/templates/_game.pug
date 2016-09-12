@@ -1,26 +1,25 @@
 //- source/templates/_game.pug
-div.row
-  div.col-sm-12
-    div.canvas-container
-      div(class="btn-group btn-group-justified")
-        //- Game instructions
-        div.btn-group
-          button(class="btn btn-info" ng-click="game.toggleHowToPlay()")
-            i(class="fa fa-info-circle" aria-hidden="true")
-            | &#8200;How to Play
-        //- Save scores
-        div.btn-group
-          button(class="btn btn-default" ng-click='game.saveStats()')
-            i(class="fa fa-floppy-o" aria-hidden="true")
-            | &#8200;Save Scores
-        //- Stats
-        div.btn-group
-          button(class="btn btn-primary" ng-click='game.showStatsPanel()')
-            i(class="fa fa-bullseye" aria-hidden="true")
-            | &#8200;Highest Scores
-      //- Stats panel view
-      div(ui-view='stats' ng-if="game.showStats" class="panel panel-primary pop-up-panel panel-right")
-      //- How to play panel view
-      div(ui-view='howToPlay' ng-if="game.showHowToPlay" class="panel panel-info pop-up-panel panel-left")
-      //- Game Canvas
-      div(id="gameCanvas", game-canvas)
+div.col-sm-12
+  div.canvas-container
+    div(class="btn-group btn-group-justified")
+      //- Game instructions
+      div.btn-group
+        button(class="btn btn-primary" ng-click="game.toggleHowToPlay()")
+          i(class="fa fa-info-circle" aria-hidden="true")
+          | &#8200;How to Play
+      //- Save scores
+      div.btn-group
+        button(class="btn btn-default" ng-click='game.saveStats()')
+          i(class="fa fa-floppy-o" aria-hidden="true")
+          | &#8200;Save Scores
+      //- Stats
+      div.btn-group
+        button(class="btn btn-primary" ng-click='game.showStatsPanel()')
+          i(class="fa fa-bullseye" aria-hidden="true")
+          | &#8200;Highest Scores
+    //- Stats panel view
+    div(ui-view='stats' ng-if="game.showStats" class="panel panel-primary pop-up-panel panel-right")
+    //- How to play panel view
+    div(ui-view='howToPlay' ng-if="game.showHowToPlay" class="panel panel-info pop-up-panel panel-left")
+    //- Game Canvas
+    div(id="gameCanvas", game-canvas)
