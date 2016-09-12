@@ -47,6 +47,13 @@
               templateUrl: 'pages/game/_how-to-play.html'
             }
           }
+        })
+        // Route for the profile page
+        .state('profile', {
+          url: '/profile',
+          templateUrl: 'pages/_profile.html',
+          controller: 'profileController',
+          controllerAs: 'profile'
         });
 
         // Remove url hash

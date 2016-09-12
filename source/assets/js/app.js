@@ -8,6 +8,7 @@
       'mainCtrl',
       'loginCtrl',
       'gameCtrl',
+      'profileCtrl',
       'alertService',
       'authService',
       'userService',
