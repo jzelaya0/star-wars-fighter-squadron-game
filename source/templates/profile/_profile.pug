@@ -4,7 +4,7 @@ div.col-sm-12
   div.jumbotron
     h1.
       Greetings {{main.user.name}}!
-
+//- Profile panel
 div.col-sm-6
   div(class="panel panel-default")
     div.panel-heading
@@ -35,3 +35,6 @@ div.col-sm-6
           tr
             td Last Update:
             td {{profile.userInfo.updatedAt}}
+
+//- Edit panel
+div(class="col-sm-6" ui-view="edit")
