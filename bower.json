@@ -21,6 +21,7 @@
     "angular-hotkeys": "chieffancypants/angular-hotkeys#^1.7.0",
     "angular-messages": "^1.5.8",
     "angular-ui-router": "^0.3.1",
-    "phaser": "^2.6.1"
+    "phaser": "^2.6.1",
+    "angular": "^1.5.8"
   }
 }
