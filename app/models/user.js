@@ -12,8 +12,8 @@ var UserSchema = new Schema({
   username: {type: String, requried: true, index: {unique: true}},//Prevent duplicate user names
   email: {type: String, requried: true, index: {unique: true}},//Prevent duplicate email addresses
   password: {type: String, required: true, select: false},//Prevent returning password on queries
-  highestScore: Number,
-  mostKills: Number
+  highestScore: {type: Number, default: 0},
+  mostKills: {type: Number, default: 0}
 },
 {
   timestamps: true
