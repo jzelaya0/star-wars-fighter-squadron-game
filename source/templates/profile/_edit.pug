@@ -24,3 +24,11 @@ div(class="panel panel-default")
       div.form-group
         div(class="col-sm-offset-2 col-sm-10")
           button(type="submit" class="btn btn-primary" name="submit" ng-disabled="editForm.$invalid") Submit
+      //- Delete Acccount button
+      div.form-group
+        div(class="col-sm-offset-2 col-sm-10")
+          button(type="button" class="btn btn-danger" ng-click="edit.toggleDelete = !edit.toggleDelete") Delete Account
+          div(ng-if="edit.toggleDelete")
+            p Are you sure?
+            button(type="button" class="btn btn-default" ng-click="edit.toggleDelete = !edit.toggleDelete") Nah.
+            button(type="button" class="btn btn-success" ng-click="edit.deleteAccount()") I'm sure.

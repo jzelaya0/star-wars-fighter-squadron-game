@@ -4,16 +4,17 @@
 
   angular
     .module('editProfileCtrl', [])
-    .controller('editProfileController', function(User,Alerts, $stateParams){
+    .controller('editProfileController', function(User,Alerts, $location, $stateParams){
       var vm = this;
       vm.isCollapsed = true;
+      vm.toggleDelete = false;
 
       // Edit user info
       // ******************************
       vm.submitForm = function(editForm){
         User.editUser($stateParams.userId,vm.editInfo)
           .success(function(result){
-            if (result.message === 'success') {
+            if (result.success === true) {
               Alerts.addAlert('success', result.message);
               console.log(result);
             }else {
@@ -25,6 +26,22 @@
             vm.editInfo = {};
           });
       };
+
+      // Delete user account
+      // ******************************
+      vm.deleteAccount = function(){
+        User.deleteUser($stateParams.userId)
+          .success(function(result){
+            if(result.success === true){
+              Alerts.addAlert('success', result.message);
+              // Redirect to home page
+              $location.path('/home');
+            }else {
+              Alerts.addAlert('danger', 'Hmm... Something is not right.');
+            }
+          });
+      };
+
 
 
     });
