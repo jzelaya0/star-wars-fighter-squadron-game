@@ -34,7 +34,7 @@
           views: {
             // Root game page
             '': {
-              templateUrl: 'pages/_game.html',
+              templateUrl: 'pages/game/_game.html',
               controller: 'gameController',
               controllerAs: 'game'
             },
@@ -50,10 +50,20 @@
         })
         // Route for the profile page
         .state('profile', {
-          url: '/profile',
-          templateUrl: 'pages/_profile.html',
-          controller: 'profileController',
-          controllerAs: 'profile'
+          url: '/profile/:userId',
+          views: {
+            // Root profile page
+            '': {
+              templateUrl: 'pages/profile/_profile.html',
+              controller: 'profileController',
+              controllerAs: 'profile'
+            },
+            'edit@profile': {
+              templateUrl: 'pages/profile/_edit.html',
+              controller: 'editProfileController',
+              controllerAs: 'edit'
+            }
+          }
         });
 
         // Remove url hash

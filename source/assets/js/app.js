@@ -9,6 +9,7 @@
       'loginCtrl',
       'gameCtrl',
       'profileCtrl',
+      'editProfileCtrl',
       'alertService',
       'authService',
       'userService',
@@ -20,7 +21,8 @@
       'playerStatsService',
       'signUpCtrl',
       'ui.bootstrap',
-      'ngMessages'
+      'ngMessages',
+      'ngAnimate'
     ])
 
     .config(function($httpProvider){

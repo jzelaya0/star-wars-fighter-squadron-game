@@ -36,7 +36,7 @@
         <!-- main navigation -->
         <ul class="nav navbar-nav" ng-if='main.isLoggedIn'>
           <li><a ui-sref="game">Play</a></li>
-          <li><a ui-sref="profile">Profile</a></li>
+          <li><a ui-sref="profile({userId: main.user._id})">Profile</a></li>
           <li><a ui-sref="score-board">Score Board</a></li>
         </ul>
 

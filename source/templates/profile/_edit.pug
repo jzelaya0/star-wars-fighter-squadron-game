@@ -1,0 +1,26 @@
+//- source/templates/profile/_edit.pug
+div(class="panel panel-default")
+  div.panel-heading
+    h2 Edit
+      span.pull-right
+        i(ng-class="{'fa fa-chevron-down': edit.isCollapsed, 'fa fa-chevron-up': !edit.isCollapsed}" ng-click="edit.isCollapsed = !edit.isCollapsed")
+  div(uib-collapse="edit.isCollapsed" class="panel-body")
+    form(class="form-horizontal", ng-submit='edit.submitForm(editForm)' name="editForm" role="form" novalidate)
+      //- Email
+      div(class="form-group", ng-class="{'has-error': editForm.email.$dirty && editForm.email.$invalid }")
+        label(class="control-label col-sm-2") Email
+        div(class="col-sm-10")
+          input(type="email" class="form-control" name="email" placeholder="Email" ng-model="edit.editInfo.email")
+          div(class="help-block", ng-messages="editForm.email.$error", ng-show="editForm.email.$dirty")
+            div(ng-messages-include="pages/components/_form-messages.html")
+      //- Password
+      div(class="form-group", ng-class="{'has-error': editForm.password.$dirty && editForm.password.$invalid }")
+        label(class="control-label col-sm-2") Password
+        div(class="col-sm-10")
+          input(type="password" class="form-control" name="password" placeholder="Password" ng-model="edit.editInfo.password", ng-minlength="6", ng-maxlength="12")
+          div(class="help-block", ng-messages="editForm.password.$error", ng-show="editForm.password.$dirty")
+            div(ng-messages-include="pages/components/_form-messages.html")
+      //- Submit button
+      div.form-group
+        div(class="col-sm-offset-2 col-sm-10")
+          button(type="submit" class="btn btn-primary" name="submit" ng-disabled="editForm.$invalid") Submit
