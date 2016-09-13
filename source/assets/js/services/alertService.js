@@ -4,7 +4,7 @@
 
   angular
     .module('alertService', [])
-    .factory('Alerts', function($rootScope){
+    .factory('Alerts', function($rootScope, $timeout){
         // create an empty object
         var alertService = {};
 
@@ -21,7 +21,10 @@
               return alertService.closeAlert(this);
             }
           });
-          console.log($rootScope.alerts);
+          // Remove alert if user doesn't close
+          $timeout(function(){
+            return alertService.closeAlert(this);
+          }, 10000);
         };
 
         // Close alert message
