@@ -64,6 +64,17 @@
               controllerAs: 'edit'
             }
           }
+        })
+        // Route for the scoreboard page
+        .state('scoreboard', {
+          url: '/scoreboard',
+          views: {
+            '': {
+              templateUrl: 'pages/scoreboard/_all-scores.html',
+              controller: 'scoreboardController',
+              controllerAs: 'all'
+            }
+          }
         });
 
         // Remove url hash

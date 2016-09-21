@@ -10,6 +10,7 @@
       'gameCtrl',
       'profileCtrl',
       'editProfileCtrl',
+      'scoreboardCtrl',
       'alertService',
       'authService',
       'userService',
@@ -22,7 +23,8 @@
       'signUpCtrl',
       'ui.bootstrap',
       'ngMessages',
-      'ngAnimate'
+      'ngAnimate',
+      'angularUtils.directives.dirPagination'
     ])
 
     .config(function($httpProvider){
