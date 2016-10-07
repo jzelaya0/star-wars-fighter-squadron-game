@@ -36,14 +36,19 @@
       // Save user's high score and kills
       // ******************************
       vm.saveStats = function(){
-        if (vm.playerStats) {
+        var stats =  PlayerStats.getPlayerStats();
+        if (stats === null) {
+          Alerts.addAlert('danger', "Sorry pilot! No scores to save. Start Playing!");
+        }else {
           User.editUser(main.user._id, vm.playerStats)
             .success(function(result){
               Alerts.addAlert('success', "Game scores have been saved!");
             });
+
         }
 
       };
+
 
     });
 
