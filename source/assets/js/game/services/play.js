@@ -31,6 +31,7 @@
     var pause;
     var pauseLabel;
     var asteroids;
+    var soundMute;
 
 
 
@@ -53,6 +54,9 @@
       //pause
       pause = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
       pause.onDown.add(playFactory.togglePause,this);
+      // mute
+      soundMute = game.input.keyboard.addKey(Phaser.Keyboard.M);
+      soundMute.onDown.add(playFactory.toggleMute, this);
       // Sound Effects
       xwingFx = game.add.audio('xwingFx');
       tieFighterFx = game.add.audio('tieFighterFx');
@@ -518,6 +522,13 @@
       var game = this.game;
       pauseLabel.visible = !pauseLabel.visible;
       game.paused = !game.paused;
+    };
+
+    // Toggle mute
+    // ******************************
+    playFactory.toggleMute = function(){
+      var game = this.game;
+      game.sound.mute = !game.sound.mute;
     };
 
     // Set game difficulty
