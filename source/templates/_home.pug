@@ -1,6 +1,12 @@
-div(class="row")
-  div(class="col-sm-8 col-sm-offset-2")
-    h1.text-center.jumbotron Star Wars Fighter Squadron
-    div(class="col-sm-6 col-sm-offset-3")
-      a(class="btn btn-success btn-block", href="/login") Login
-      a(class="btn btn-default btn-block", href="/signup") Sign Up
+div(class="col-sm-8 col-sm-offset-2")
+  h1(class="text-center jumbotron" id='home-title') Star Wars Fighter Squadron
+  div(class="col-sm-6 col-sm-offset-3")
+    a(class="btn btn-success btn-block", href="/login") Login
+    a(class="btn btn-default btn-block", href="/signup") Sign Up
+div(class="col-sm-6 col-sm-offset-3" id="game-info")
+  h2.text-center
+    | Take down the Empire!
+    span
+      i.fa.fa-gamepad
+  p
+    | Fight your way through waves of Imperial Tie Fighters as a lone X-Wing pilot in space! Save your highest scores and see where you rank up with other players in the public Scoreboard!
