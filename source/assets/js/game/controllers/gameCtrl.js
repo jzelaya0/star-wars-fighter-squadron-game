@@ -4,11 +4,19 @@
 
   angular
     .module('gameCtrl',[])
-    .controller('gameController', function($scope, User,Alerts,PlayerStats){
+    .controller('gameController', function($scope, User,Alerts,PlayerStats, deviceDetector){
       var vm = this;
       var main = $scope.main;
       vm.showStats = false;
       vm.showHowToPlay = false;
+      vm.showGame = false;
+
+      // Show game only on desktops
+      // ******************************
+      if (deviceDetector.isDesktop()) {
+        vm.showGame = true;
+      }
+
 
       // Get player stats from local storage
       // ******************************

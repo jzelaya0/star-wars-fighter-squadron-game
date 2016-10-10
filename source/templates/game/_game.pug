@@ -1,6 +1,7 @@
 //- source/templates/_game.pug
 div.col-sm-12
-  div.canvas-container
+  //- Only show on desktop
+  div(class="canvas-container" ng-if="game.showGame")
     div(class="btn-group btn-group-justified")
       //- Game instructions
       div.btn-group
@@ -23,3 +24,11 @@ div.col-sm-12
     div(ui-view='howToPlay' ng-if="game.showHowToPlay" class="panel panel-info pop-up-panel panel-left")
     //- Game Canvas
     div(id="gameCanvas", game-canvas)
+  //- Only show if device is mobile or tablet
+  div(class='panel panel-warning' ng-if="!game.showGame")
+    div(class="panel-heading")
+      h1.
+       Oops! Can't play here!
+    div(class="panel-body")
+      p
+        | This game is not playable on mobile or tablet devices. Please log in on a laptop or desktop device to play!

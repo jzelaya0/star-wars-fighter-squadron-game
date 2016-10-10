@@ -24,7 +24,8 @@
       'ui.bootstrap',
       'ngMessages',
       'ngAnimate',
-      'angularUtils.directives.dirPagination'
+      'angularUtils.directives.dirPagination',
+      'ng.deviceDetector'
     ])
 
     .config(function($httpProvider){
