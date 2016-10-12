@@ -19,3 +19,6 @@ div(class="row col-sm-6 col-sm-offset-3 well")
     div.form-group
       button(type='submit', class='btn btn-success').
         Log In
+    //- Loading spinner    
+    div(class="form-group text-center" ng-if="login.isLoading")
+      i.fa.fa-spinner.loader

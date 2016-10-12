@@ -6,10 +6,14 @@
     .module('loginCtrl',[])
     .controller('loginController', function($rootScope, $location, Auth, Alerts){
       var vm = this;
+      vm.isLoading = false;
 
       // Log User in
       // ******************************
       vm.login = function(){
+        // show loader on click
+        vm.isLoading = true;
+        // login request
         Auth.logUserIn(vm.loginData.username, vm.loginData.password)
           .success(function(result){
             if(result.success){
@@ -19,6 +23,9 @@
               //Bind error message to global alerts
               Alerts.addAlert("danger", result.message);
             }
+
+            //hide loader
+            vm.isLoading = false;
           });
       };
 

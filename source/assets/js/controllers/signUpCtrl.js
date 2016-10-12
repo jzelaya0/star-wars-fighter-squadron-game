@@ -6,10 +6,14 @@
     .module('signUpCtrl', [])
     .controller('signUpController', function($location, User, Alerts){
       var vm = this;
+      vm.isLoading = false;
 
       // Create a new user
       // ******************************
       vm.signUp = function(signupForm){
+        // show loading spinner
+        vm.isLoading = true;
+        // sign up request
         User.createUser(vm.signUpData)
           .success(function(result){
             // add to result messages
@@ -33,6 +37,9 @@
             signupForm.$setPristine();
             // Clear the form on submit
             vm.signUpData = {};
+            // remove loading spinner
+            vm.isLoading = false;
+
           });
       };
 
